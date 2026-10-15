@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medicine AI | Your Health Learning Companion</title>
+
+<style>
+:root {
+  --bg:#f3f7fc;
+  --card:#ffffff;
+  --text:#17243a;
+  --muted:#708096;
+  --primary:#176b87;
+  --secondary:#12b8a6;
+  --border:#e2eaf2;
+  --shadow:0 12px 35px rgba(24,53,85,.08);
+}
+* {box-sizing:border-box;margin:0;padding:0}
+body {
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+  background:var(--bg);color:var(--text);
+  line-height:1.55;min-height:100vh;
+}
+button,input,select,textarea {font:inherit}
+button {cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible {
+  outline:3px solid #54c6d8;outline-offset:2px
+}
+.hidden {display:none!important}
+.muted {color:var(--muted)}
+.small {font-size:12px;color:var(--muted)}
+.eyebrow {
+  color:var(--secondary);font-weight:800;text-transform:uppercase;
+  letter-spacing:2px;font-size:11px
+}
+h1,h2,h3 {line-height:1.2}
+h2 {font-size:clamp(22px,3vw,30px);margin-bottom:10px}
+h3 {font-size:17px;margin-bottom:7px}
+p {margin-bottom:10px}
+.btn {
+  border:0;border-radius:12px;padding:11px 16px;font-weight:750;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:.2s; text-decoration:none
+}
+.btn:hover {transform:translateY(-2px)}
+.btn-primary {background:linear-gradient(135deg,#176b87,#12b8a6);color:white}
+.btn-light {background:#e8f6f8;color:#176b87}
+.btn-dark {background:#152740;color:white}
+.btn-danger {background:#fff0f0;color:#bd3434}
+.btn-outline {background:white;border:1px solid var(--border);color:var(--text)}
+.field {display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label {font-size:13px;font-weight:750}
+.field input,.field select,.field textarea,.searchbox input {
+  width:100%;padding:12px 13px;border:1px solid var(--border);
+  border-radius:12px;background:white;color:var(--text);min-width:0
+}
+.field input:focus,.field select:focus,.searchbox input:focus {
+  border-color:var(--secondary);outline:none;box-shadow:0 0 0 3px #12b8a61b
+}
+.grid {display:grid;gap:18px}
+.two-col {grid-template-columns:repeat(2,minmax(0,1fr))}
+.three-col {grid-template-columns:repeat(3,minmax(0,1fr))}
+.four-col {grid-template-columns:repeat(4,minmax(0,1fr))}
+.card {
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:21px;box-shadow:var(--shadow);min-width:0
+}
+.icon-box {
+  display:grid;place-items:center;width:48px;height:48px;
+  border-radius:15px;background:#e5f7f5;font-size:25px;flex-shrink:0
+}
+.tag {
+  display:inline-block;background:#e9f7f5;color:#087e76;
+  font-size:11px;font-weight:800;padding:5px 10px;border-radius:30px
+}
+
+/* Welcome screen */
+#welcome {
+  min-height:100vh;padding:28px;display:flex;align-items:center;
+  justify-content:center;position:relative;overflow:hidden;color:white;
+  background:radial-gradient(ellipse at 15% 15%,#1b6885 0,transparent 40%),
+  radial-gradient(ellipse at 90% 85%,#078f88 0,transparent 38%),
+  linear-gradient(135deg,#071426,#101f3d 58%,#062f42)
+}
+#welcome:before,#welcome:after {
+  content:"";position:absolute;border:1px solid #ffffff15;border-radius:50%;
+  width:390px;height:390px;pointer-events:none
+}
+#welcome:before {right:-160px;top:-100px}
+#welcome:after {left:-220px;bottom:-240px;width:500px;height:500px}
+.welcome-inner {
+  width:min(1060px,100%);display:grid;
+  grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;z-index:1
+}
+.welcome-title {font-size:clamp(42px,7vw,76px);letter-spacing:-3px;margin:12px 0 20px}
+.gradient-text {
+  background:linear-gradient(90deg,#69e5d3,#a5edff);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.welcome-desc {color:#c8d6e9;max-width:550px;font-size:17px;line-height:1.8}
+.welcome-art {display:flex;align-items:center;justify-content:center;position:relative}
+.welcome-orb {
+  width:min(360px,80vw);aspect-ratio:1;border-radius:50%;display:grid;
+  place-items:center;background:radial-gradient(circle at 30% 25%,#236781,#102944 65%);
+  border:1px solid #ffffff24;box-shadow:0 0 100px #13b9a42b;
+  font-size:145px;animation:float 4s ease-in-out infinite
+}
+.welcome-art .orbit {
+  position:absolute;width:110%;aspect-ratio:1;border:1px dashed #6be6d388;
+  border-radius:50%;animation:spin 25s linear infinite
+}
+.welcome-art .orbit:after {
+  content:"✚";position:absolute;top:8%;right:12%;color:#7bf2df;font-size:28px
+}
+.welcome-bottom {margin-top:28px;color:#a9bfd3;font-size:13px}
+.feature-pills {display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.feature-pills span {
+  border:1px solid #ffffff26;background:#ffffff0b;border-radius:30px;
+  padding:8px 12px;font-size:12px;color:#dbeaf8
+}
+@keyframes float {50%{transform:translateY(-12px)}}
+@keyframes spin {to{transform:rotate(360deg)}}
+
+/* Main application */
+#app {min-height:100vh}
+.topbar {
+  height:75px;background:#fff;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;gap:15px;position:sticky;top:0;z-index:20
+}
+.brand {display:flex;align-items:center;gap:11px;font-weight:900;font-size:19px}
+.brand-mark {
+  width:42px;height:42px;display:grid;place-items:center;border-radius:14px;
+  background:linear-gradient(135deg,#176b87,#12b8a6);color:white;font-size:22px
+}
+.brand small {display:block;font-size:10px;color:var(--muted);letter-spacing:1.5px}
+.top-actions {display:flex;align-items:center;gap:10px}
+.language-select {
+  border:1px solid var(--border);background:white;border-radius:10px;padding:10px;
+  max-width:145px;color:var(--text)
+}
+.layout {display:grid;grid-template-columns:245px minmax(0,1fr)}
+.sidebar {
+  background:#fff;border-right:1px solid var(--border);padding:22px 14px;
+  min-height:calc(100vh - 75px);position:sticky;top:75px;height:calc(100vh - 75px);
+  overflow:auto;display:flex;flex-direction:column
+}
+.nav-label {
+  font-size:10px;letter-spacing:1.7px;color:#91a0b4;
+  font-weight:900;padding:12px 12px 8px
+}
+.nav-btn {
+  width:100%;display:flex;align-items:center;gap:12px;padding:12px;
+  background:transparent;border:0;border-radius:12px;text-align:left;
+  color:#617086;font-weight:750;margin:2px 0
+}
+.nav-btn .nav-icon {width:25px;text-align:center;font-size:19px}
+.nav-btn:hover,.nav-btn.active {background:#e8f7f5;color:#087f79}
+.sidebar-bottom {
+  margin-top:auto;background:linear-gradient(145deg,#142944,#1c5c70);
+  border-radius:16px;padding:16px;color:white
+}
+.sidebar-bottom p {color:#c0d8e5;font-size:12px;margin:8px 0}
+.main {padding:30px;min-width:0;max-width:1600px;width:100%;margin:0 auto}
+.view {display:none;animation:appear .25s ease}
+.view.active {display:block}
+@keyframes appear {from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
+.page-heading {
+  display:flex;justify-content:space-between;align-items:flex-start;
+  flex-wrap:wrap;gap:16px;margin-bottom:24px
+}
+.page-heading p {color:var(--muted);margin-top:7px;max-width:680px}
+.hero-card {
+  border-radius:25px;padding:30px;color:white;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 87% 15%,#3bc5bb60,transparent 32%),
+  linear-gradient(120deg,#123451,#176b87 65%,#0c8f91);
+  margin-bottom:23px
+}
+.hero-card:after {
+  content:"✚";position:absolute;right:8%;top:2%;
+  font-size:155px;color:#ffffff0b;transform:rotate(15deg)
+}
+.hero-card h1 {font-size:clamp(27px,4vw,42px);max-width:650px;margin:10px 0}
+.hero-card p {color:#d5eaf3;max-width:600px;line-height:1.8}
+.hero-card .btn {margin-top:10px;position:relative;z-index:1}
+.stats-card {display:flex;gap:12px;align-items:center}
+.stats-number {font-size:26px;font-weight:900}
+.section-title {display:flex;justify-content:space-between;align-items:center;gap:12px;margin:27px 0 15px}
+.section-title h3 {margin:0}
+.feature-card {cursor:pointer;transition:.2s}
+.feature-card:hover {transform:translateY(-4px);border-color:#9adcd6}
+.feature-card h3 {margin:14px 0 7px}
+.feature-card p {font-size:13px;color:var(--muted);margin:0}
+.searchbox {
+  display:flex;align-items:center;gap:9px;background:white;border:1px solid var(--border);
+  border-radius:14px;padding:0 12px;flex:1;min-width:180px
+}
+.searchbox input {border:0;box-shadow:none!important;padding:13px 4px}
+.search-tools {display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.chips {display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}
+.chip {
+  background:white;border:1px solid var(--border);color:#687a90;
+  padding:8px 13px;border-radius:30px;font-weight:700;font-size:12px
+}
+.chip.active {background:#176b87;color:white;border-color:#176b87}
+.medicine-card {display:flex;flex-direction:column;gap:12px}
+.medicine-card .med-top {display:flex;align-items:center;gap:12px}
+.medicine-card .med-top .icon-box {font-size:23px}
+.med-name {font-size:18px;font-weight:850}
+.med-generic {font-size:12px;color:var(--muted)}
+.med-actions {display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.med-actions .btn {font-size:12px;padding:9px 12px}
+.notice {
+  padding:13px 15px;background:#fff8e9;border:1px solid #f4dfae;
+  border-radius:12px;color:#755716;font-size:12px;line-height:1.65
+}
+.info-line {margin:13px 0;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.info-line:last-child {border-bottom:0}
+.info-line b {display:block;font-size:12px;color:#52657b;margin-bottom:4px}
+.info-line p {font-size:14px;margin:0}
+.reminder-item {
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  border:1px solid var(--border);border-radius:15px;padding:15px;margin:10px 0
+}
+.reminder-time {font-size:20px;font-weight:900;color:#176b87}
+.reminder-details {min-width:0}
+.reminder-details p {font-size:12px;color:var(--muted);margin:4px 0 0}
+.reminder-actions {display:flex;gap:7px;flex-wrap:wrap}
+.reminder-actions .btn {padding:8px 10px;font-size:12px}
+.empty-state {text-align:center;padding:35px 15px;color:var(--muted)}
+.empty-state .big {font-size:35px;margin-bottom:10px}
+.body-layout {display:grid;grid-template-columns:minmax(250px,.9fr) minmax(0,1.1fr);gap:20px}
+.body-stage {
+  background:radial-gradient(ellipse at center,#e5f8f6,#f8fbff 70%);
+  border-radius:18px;padding:20px;display:flex;align-items:center;justify-content:center;
+  min-height:450px;overflow:hidden
+}
+.body-svg {width:min(100%,290px);height:auto;max-height:510px}
+.body-shape {fill:#b3cbdc;stroke:#6f91a8;stroke-width:2}
+.hotspot {cursor:pointer;transition:.2s}
+.hotspot:hover {filter:drop-shadow(0 0 7px #12b8a6);transform:scale(1.12);transform-origin:center}
+.hotspot circle {fill:#12b8a6;stroke:#fff;stroke-width:3}
+.hotspot text {fill:#fff;font-weight:bold;font-size:13px;text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.part-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.part-btn {
+  display:flex;align-items:center;gap:10px;border:1px solid var(--border);
+  background:white;border-radius:13px;padding:13px;text-align:left;font-weight:750;color:var(--text)
+}
+.part-btn:hover {border-color:var(--secondary);background:#f0fbfa}
+.part-btn span:first-child {font-size:24px}
+.doctor-note {font-size:13px;color:var(--muted);margin-top:14px}
+.app-footer {text-align:center;font-size:12px;color:var(--muted);padding:35px 0 15px}
+.app-footer strong {color:#176b87}
+
+/* Education modal */
+#bodyModal {
+  position:fixed;inset:0;z-index:100;background:rgba(2,7,17,.97);color:white;
+  display:none;overflow-y:auto
+}
+#bodyModal.show {display:block;animation:appear .3s}
+.modal-top {
+  display:flex;justify-content:space-between;align-items:center;gap:15px;
+  padding:18px 23px;border-bottom:1px solid #ffffff19
+}
+.modal-top .brand {color:white}
+.modal-content {
+  max-width:1100px;margin:0 auto;padding:25px;
+  display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center;min-height:75vh
+}
+.organ-art {
+  min-height:310px;display:grid;place-items:center;position:relative;
+  background:radial-gradient(circle,#133d58 0,#081726 60%,transparent 75%);
+  border-radius:24px
+}
+.organ-emoji {
+  font-size:clamp(90px,13vw,165px);filter:drop-shadow(0 0 27px #16c9b15a);
+  animation:organZoom 2s ease-in-out infinite alternate
+}
+@keyframes organZoom {to{transform:scale(1.13);filter:drop-shadow(0 0 40px #16c9b1a0)}}
+.organ-label {
+  position:absolute;bottom:18px;color:#b5eae7;font-size:12px;letter-spacing:2px;
+  text-transform:uppercase
+}
+.doctor-row {display:flex;align-items:center;gap:14px;margin:20px 0}
+.doctor {
+  width:78px;height:92px;flex-shrink:0;position:relative;animation:doctorMove 2s ease-in-out infinite;
+}
+@keyframes doctorMove {0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) translateY(-3px)}}
+.doctor-head {
+  position:absolute;top:0;left:20px;width:39px;height:38px;background:#efc7a5;
+  border-radius:50%;border:2px solid #fff
+}
+.doctor-hair {
+  position:absolute;top:-2px;left:19px;width:41px;height:17px;
+  border-radius:19px 18px 5px 5px;background:#352b32;z-index:1
+}
+.doctor-eyes {position:absolute;top:18px;left:28px;letter-spacing:10px;color:#273449;font-size:12px;z-index:2}
+.doctor-coat {
+  position:absolute;top:38px;left:10px;width:60px;height:52px;
+  background:#f2fbff;clip-path:polygon(20% 0,42% 0,50% 12%,58% 0,80% 0,100% 35%,86% 55%,80% 48%,80% 100%,20% 100%,20% 48%,14% 55%,0 35%)
+}
+.doctor-tie {
+  position:absolute;top:41px;left:37px;width:9px;height:34px;
+  background:#12b8a6;clip-path:polygon(50% 0,100% 14%,70% 100%,30% 100%,0 14%)
+}
+.doctor-speech {
+  flex:1;border:1px solid #ffffff20;background:#0c2034;padding:15px;
+  border-radius:16px 16px 16px 3px;color:#d4e8f5;font-size:13px
+}
+.education-text h2 {margin-bottom:10px}
+.education-text p {color:#c1d2e2;font-size:14px;line-height:1.8}
+.education-text .btn {margin-top:10px}
+.modal-close {background:#ffffff12;color:white;border:1px solid #ffffff25;border-radius:10px;padding:10px 15px}
+.modal-lang {background:#10273b;color:white;border:1px solid #ffffff25;border-radius:10px;padding:9px}
+@media(max-width:1000px) {
+  .layout {grid-template-columns:78px minmax(0,1fr)}
+  .sidebar {padding:17px 9px}
+  .nav-btn {justify-content:center;padding:13px 5px}
+  .nav-btn .nav-text,.nav-label,.sidebar-bottom {display:none}
+  .nav-btn .nav-icon {font-size:22px;width:auto}
+  .welcome-inner {grid-template-columns:1fr .8fr}
+  .four-col {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px) {
+  .topbar {height:65px;padding:0 13px}
+  .brand {font-size:16px}
+  .brand-mark {width:36px;height:36px}
+  .brand small {display:none}
+  .language-select {max-width:105px;padding:9px 5px;font-size:12px}
+  .top-actions .btn {padding:9px;font-size:12px}
+  .layout {grid-template-columns:1fr}
+  .sidebar {
+    min-height:auto;height:auto;position:fixed;z-index:30;top:auto;bottom:0;left:0;right:0;
+    display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;border-right:0;
+    border-top:1px solid var(--border);padding:6px 3px;background:white
+  }
+  .nav-btn {min-width:58px;margin:0;display:flex;flex-direction:column;gap:3px;padding:5px}
+  .nav-btn .nav-icon {font-size:19px}
+  .nav-btn .nav-text {display:block;font-size:9px;white-space:nowrap}
+  .main {padding:20px 13px 100px}
+  .hero-card {padding:23px 19px}
+  .three-col,.two-col {grid-template-columns:1fr}
+  .four-col {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card {padding:16px;border-radius:16px}
+  .stats-card {padding:13px}
+  .body-layout {grid-template-columns:1fr}
+  .body-stage {min-height:390px}
+  .modal-content {grid-template-columns:1fr;gap:16px;padding:15px}
+  .organ-art {min-height:230px}
+  .organ-emoji {font-size:100px}
+  .modal-top {padding:12px}
+  .welcome-inner {grid-template-columns:1fr}
+  .welcome-title {font-size:47px;letter-spacing:-2px}
+  .welcome-art {grid-row:1}
+  .welcome-orb {width:175px;font-size:76px}
+  .welcome-art .orbit {width:200px}
+  .welcome-desc {font-size:15px}
+  #welcome {padding:24px 20px}
+  .reminder-item {align-items:flex-start;flex-wrap:wrap}
+  .reminder-actions {width:100%}
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME SCREEN -->
+<section id="welcome">
+  <div class="welcome-inner">
+    <div>
+      <div class="eyebrow">SMART HEALTH • LEARN • REMEMBER</div>
+      <h1 class="welcome-title">Welcome to<br><span class="gradient-text">Medicine AI</span></h1>
+      <p class="welcome-desc">
+        Your personal health-learning companion. Explore medicine information,
+        learn how the human body works, create medicine reminders, and search
+        for nearby pharmacies—all in one place.
+      </p>
+      <div class="feature-pills">
+        <span>💊 Medicine Guide</span>
+        <span>⏰ Voice Reminders</span>
+        <span>🫀 Human Body Lab</span>
+        <span>🌍 3 Languages</span>
+        <span>📍 Pharmacy Finder</span>
+      </div>
+      <button class="btn btn-primary" style="margin-top:28px;padding:15px 24px"
+        onclick="enterApp()">Explore Medicine AI <span>→</span></button>
+      <div class="welcome-bottom">Created &amp; developed by <strong>Madhvi</strong></div>
+    </div>
+    <div class="welcome-art">
+      <div class="orbit"></div>
+      <div class="welcome-orb">🩺</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">✚</div>
+      <div>Medicine AI<small>YOUR HEALTH COMPANION</small></div>
+    </div>
+    <div class="top-actions">
+      <select id="language" class="language-select" onchange="changeLanguage(this.value)"
+        aria-label="Choose language">
+        <option value="en">🇬🇧 English</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+        <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+      </select>
+      <button class="btn btn-outline" onclick="showView('home')">⌂ <span data-i18n="home">Home</span></button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="nav-label" data-i18n="workspace">WORKSPACE</div>
+
+      <button class="nav-btn active" data-view="home" onclick="showView('home')">
+        <span class="nav-icon">⌂</span><span class="nav-text" data-i18n="dashboard">Dashboard</span>
+      </button>
+      <button class="nav-btn" data-view="medicines" onclick="showView('medicines')">
+        <span class="nav-icon">💊</span><span class="nav-text" data-i18n="medicines">Medicine Guide</span>
+      </button>
+      <button class="nav-btn" data-view="reminders" onclick="showView('reminders')">
+        <span class="nav-icon">⏰</span><span class="nav-text" data-i18n="reminders">Reminders</span>
+      </button>
+      <button class="nav-btn" data-view="pharmacy" onclick="showView('pharmacy')">
+        <span class="nav-icon">📍</span><span class="nav-text" data-i18n="pharmacy">Find Pharmacy</span>
+      </button>
+      <button class="nav-btn" data-view="body" onclick="showView('body')">
+        <span class="nav-icon">🫀</span><span class="nav-text" data-i18n="body">Human Body Lab</span>
+      </button>
+
+      <div class="nav-label" style="margin-top:20px" data-i18n="more">MORE</div>
+      <button class="nav-btn" onclick="showAbout()">
+        <span class="nav-icon">ⓘ</span><span class="nav-text" data-i18n="about">About this project</span>
+      </button>
+
+      <div class="sidebar-bottom">
+        <div style="font-size:27px">🩺</div>
+        <strong>Learn. Care. Remember.</strong>
+        <p>Knowledge helps you ask better health questions.</p>
+        <span class="small" style="color:#c1e9ed">Project by Madhvi</span>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <!-- HOME -->
+      <section id="view-home" class="view active">
+        <div class="hero-card">
+          <div class="eyebrow" style="color:#8bf0dd">YOUR DIGITAL HEALTH COMPANION</div>
+          <h1 data-i18n="heroTitle">Better health knowledge starts here.</h1>
+          <p data-i18n="heroText">
+            Explore medicine facts, understand your body, and build helpful
+            reminders for your daily routine.
+          </p>
+          <button class="btn btn-light" onclick="showView('medicines')" data-i18n="exploreMeds">
+            Explore medicines →
+          </button>
+        </div>
+
+        <div class="grid three-col">
+          <div class="card stats-card">
+            <div class="icon-box">💊</div>
+            <div><div class="stats-number">09+</div><div class="small" data-i18n="sampleMeds">Sample medicine profiles</div></div>
+          </div>
+          <div class="card stats-card">
+            <div class="icon-box">⏰</div>
+            <div><div class="stats-number" id="reminderCount">0</div><div class="small" data-i18n="savedReminders">Saved reminders</div></div>
+          </div>
+          <div class="card stats-card">
+            <div class="icon-box">🌍</div>
+            <div><div class="stats-number">03</div><div class="small" data-i18n="languages">Available languages</div></div>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h3 data-i18n="quickAccess">Quick access</h3>
+        </div>
+        <div class="grid four-col">
+          <div class="card feature-card" onclick="showView('medicines')">
+            <div class="icon-box">🔎</div>
+            <h3 data-i18n="searchMed">Search medicine</h3>
+            <p data-i18n="searchMedText">Names, uses, compounds and possible side effects.</p>
+          </div>
+          <div class="card feature-card" onclick="showView('reminders')">
+            <div class="icon-box">🔔</div>
+            <h3 data-i18n="setReminder">Set a reminder</h3>
+            <p data-i18n="setReminderText">Choose a time and test the spoken reminder.</p>
+          </div>
+          <div class="card feature-card" onclick="showView('pharmacy')">
+            <div class="icon-box">🗺️</div>
+            <h3 data-i18n="findPharmacy">Find a pharmacy</h3>
+            <p data-i18n="findPharmacyText">Open a map search for nearby chemists.</p>
+          </div>
+          <div class="card feature-card" onclick="showView('body')">
+            <div class="icon-box">🧠</div>
+            <h3 data-i18n="exploreBody">Explore the body</h3>
+            <p data-i18n="exploreBodyText">Select an organ to learn with the AI doctor.</p>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h3 data-i18n="healthNote">A helpful health reminder</h3>
+        </div>
+        <div class="card">
+          <p style="margin:0" data-i18n="healthNoteText">
+            Medicine information is educational. Always confirm the right medicine,
+            dose, timing, and suitability with a qualified healthcare professional.
+          </p>
+        </div>
+      </section>
+
+      <!-- MEDICINE GUIDE -->
+      <section id="view-medicines" class="view">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow" data-i18n="referenceLibrary">REFERENCE LIBRARY</div>
+            <h2 data-i18n="medicineTitle">Medicine Guide</h2>
+            <p data-i18n="medicineSubtitle">Search a medicine to view its generic name, active compound, general uses, possible side effects and cautions.</p>
+          </div>
+          <button class="btn btn-primary" onclick="showView('reminders')">⏰ <span data-i18n="addReminder">Add reminder</span></button>
+        </div>
+
+        <div class="search-tools">
+          <div class="searchbox">
+            <span>🔍</span>
+            <input id="medSearch" type="search" placeholder="Search a medicine, generic name or category..."
+              oninput="renderMedicines()">
+          </div>
+        </div>
+        <div class="chips" id="categoryChips"></div>
+        <div class="notice" style="margin-bottom:20px" data-i18n="medicineNotice">
+          This is a small educational demo database, not a complete drug reference.
+          Brand formulations can vary. Check the active ingredient on the package.
+          Never start, stop, or change a medicine based only on this website.
+        </div>
+        <div id="medicineResults" class="grid two-col"></div>
+      </section>
+
+      <!-- REMINDERS -->
+      <section id="view-reminders" class="view">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">DAILY ROUTINE</div>
+            <h2 data-i18n="reminderTitle">Medicine Reminders</h2>
+            <p data-i18n="reminderSubtitle">Save the reminder time and choose the spoken alert volume.</p>
+          </div>
+        </div>
+
+        <div class="grid two-col">
+          <div class="card">
+            <div class="icon-box">⏰</div>
+            <h3 style="margin-top:15px" data-i18n="createReminder">Create a reminder</h3>
+            <form id="reminderForm">
+              <div class="field">
+                <label for="remMedicine" data-i18n="medicineName">Medicine name</label>
+                <input id="remMedicine" required maxlength="90" placeholder="e.g. Medicine prescribed to you">
+              </div>
+              <div class="field">
+                <label for="remTime" data-i18n="reminderTime">Reminder time</label>
+                <input id="remTime" type="time" required>
+              </div>
+              <div class="field">
+                <label for="remNote" data-i18n="optionalNote">Note (optional)</label>
+                <input id="remNote" maxlength="150" placeholder="e.g. Follow the prescription instructions">
+              </div>
+              <button class="btn btn-primary" type="submit" style="width:100%" data-i18n="saveReminder">＋ Save reminder</button>
+            </form>
+            <p class="small" style="margin-top:12px" data-i18n="dailyNote">
+              Reminders repeat daily while this website is running.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="icon-box">🔊</div>
+            <h3 style="margin-top:15px" data-i18n="voiceSettings">Voice settings</h3>
+            <div class="field" style="margin-top:18px">
+              <label for="volume" data-i18n="alertVolume">Alert volume</label>
+              <input id="volume" type="range" min="0" max="100" value="85"
+                oninput="document.getElementById('volumeValue').textContent=this.value+'%'">
+              <div class="small" id="volumeValue">85%</div>
+            </div>
+            <div class="field">
+              <label for="voiceStyle" data-i18n="voiceLanguage">Reminder language</label>
+              <select id="voiceStyle">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="pa">ਪੰਜਾਬੀ</option>
+              </select>
+            </div>
+            <button class="btn btn-light" onclick="testVoice()">▶ <span data-i18n="testVoice">Test voice reminder</span></button>
+            <button class="btn btn-outline" style="margin-top:10px" onclick="enableNotifications()">🔔 <span data-i18n="enableAlerts">Enable browser notifications</span></button>
+            <p class="small" style="margin-top:14px" data-i18n="voiceNote">
+              Voice alerts need a supported browser. Keep this page open for reminders;
+              this version does not run alarms when the browser is fully closed.
+            </p>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h3 data-i18n="yourReminders">Your saved reminders</h3>
+          <button class="btn btn-outline" onclick="renderReminders()">↻ <span data-i18n="refresh">Refresh</span></button>
+        </div>
+        <div class="card">
+          <div id="reminderList"></div>
+        </div>
+      </section>
+
+      <!-- PHARMACY FINDER -->
+      <section id="view-pharmacy" class="view">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">LOCAL SEARCH</div>
+            <h2 data-i18n="pharmacyTitle">Find a Pharmacy</h2>
+            <p data-i18n="pharmacySubtitle">Search a place to see pharmacies and chemists on a map.</p>
+          </div>
+        </div>
+        <div class="grid two-col">
+          <div class="card">
+            <div class="icon-box">📍</div>
+            <h3 style="margin-top:14px" data-i18n="searchNearby">Search pharmacies</h3>
+            <form id="pharmacyForm">
+              <div class="field">
+                <label for="pharmacyPlace" data-i18n="cityOrArea">City, area or PIN code</label>
+                <input id="pharmacyPlace" placeholder="e.g. Jalandhar, Punjab" required>
+              </div>
+              <button class="btn btn-primary" type="submit" style="width:100%" data-i18n="openMap">Open pharmacy map →</button>
+            </form>
+            <button class="btn btn-outline" style="width:100%;margin-top:10px" onclick="useMyLocation()">◎ <span data-i18n="useLocation">Use my current location</span></button>
+            <p class="small" style="margin-top:15px" data-i18n="mapNote">
+              Map results come from the map provider. Confirm opening hours, stock, and contact details with the pharmacy.
+            </p>
+          </div>
+
+          <div class="card" style="background:linear-gradient(145deg,#e5f8f5,#eef5ff)">
+            <div style="font-size:62px">🗺️</div>
+            <h3 data-i18n="mapSearch">Map-powered search</h3>
+            <p data-i18n="mapSearchText">Search by locality or allow location access in your browser to look for nearby pharmacies.</p>
+            <div class="notice" data-i18n="privacyNote">Your location is used only after you press the location button. It is not stored by this website.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BODY EDUCATION -->
+      <section id="view-body" class="view">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">INTERACTIVE LEARNING</div>
+            <h2 data-i18n="bodyTitle">Human Body Lab</h2>
+            <p data-i18n="bodySubtitle">Select an organ on the diagram or choose a body part below. The learning screen will zoom in and your animated AI doctor will explain its function.</p>
+          </div>
+        </div>
+
+        <div class="body-layout">
+          <div class="card">
+            <div class="section-title" style="margin-top:0"><h3 data-i18n="clickOrgan">Click an organ</h3></div>
+            <div class="body-stage">
+              <svg class="body-svg" viewBox="0 0 260 490" role="img" aria-label="Interactive human body illustration">
+                <!-- Stylized educational silhouette, not a medical anatomy image -->
+                <ellipse class="body-shape" cx="130" cy="46" rx="33" ry="39"/>
+                <path class="body-shape" d="M112 79 L112 94 L91 99 Q74 104 67 128 L43 207 Q39 222 52 226 Q64 229 69 214 L96 148 L89 235 Q86 255 98 265 L101 351 L91 456 Q90 474 106 474 Q117 474 119 456 L132 365 L145 456 Q148 474 161 474 Q177 474 170 454 L161 350 L163 266 Q176 251 172 232 L164 148 L191 214 Q196 229 208 225 Q222 221 216 206 L193 127 Q187 105 168 99 L148 94 L148 79 Z"/>
+                <path d="M114 102 L130 116 L146 102 L153 244 L107 244 Z" fill="#d6e7ef" stroke="#82a6bd" stroke-width="1"/>
+                <!-- brain -->
+                <g class="hotspot" data-part="brain" tabindex="0" role="button" aria-label="Brain">
+                  <circle cx="130" cy="34" r="14"/><text x="130" y="34">1</text>
+                </g>
+                <!-- lungs -->
+                <g class="hotspot" data-part="lungs" tabindex="0" role="button" aria-label="Lungs">
+                  <circle cx="111" cy="145" r="13"/><text x="111" y="145">2</text>
+                  <circle cx="148" cy="145" r="13"/><text x="148" y="145">2</text>
+                </g>
+                <!-- heart -->
+                <g class="hotspot" data-part="heart" tabindex="0" role="button" aria-label="Heart">
+                  <circle cx="130" cy="170" r="13"/><text x="130" y="170">3</text>
+                </g>
+                <!-- liver -->
+                <g class="hotspot" data-part="liver" tabindex="0" role="button" aria-label="Liver">
+                  <circle cx="110" cy="209" r="12"/><text x="110" y="209">4</text>
+                </g>
+                <!-- stomach -->
+                <g class="hotspot" data-part="stomach" tabindex="0" role="button" aria-label="Stomach">
+                  <circle cx="150" cy="219" r="12"/><text x="150" y="219">5</text>
+                </g>
+                <!-- kidneys -->
+                <g class="hotspot" data-part="kidneys" tabindex="0" role="button" aria-label="Kidneys">
+                  <circle cx="105" cy="247" r="12"/><text x="105" y="247">6</text>
+                  <circle cx="154" cy="247" r="12"/><text x="154" y="247">6</text>
+                </g>
+                <!-- intestines -->
+                <g class="hotspot" data-part="intestines" tabindex="0" role="button" aria-label="Intestines">
+                  <circle cx="130" cy="270" r="12"/><text x="130" y="270">7</text>
+                </g>
+                <!-- bones -->
+                <g class="hotspot" data-part="bones" tabindex="0" role="button" aria-label="Bones">
+                  <circle cx="130" cy="324" r="12"/><text x="130" y="324">8</text>
+                </g>
+                <!-- skin -->
+                <g class="hotspot" data-part="skin" tabindex="0" role="button" aria-label="Skin">
+                  <circle cx="190" cy="111" r="12"/><text x="190" y="111">9</text>
+                </g>
+              </svg>
+            </div>
+            <p class="small" style="text-align:center;margin-top:12px" data-i18n="bodyDiagramNote">Simplified educational illustration • Not to scale</p>
+          </div>
+
+          <div class="card">
+            <div class="section-title" style="margin-top:0"><h3 data-i18n="choosePart">Choose a body part</h3></div>
+            <div id="bodyPartList" class="part-grid"></div>
+            <p class="doctor-note" data-i18n="bodyDisclaimer">Learning content only. It does not diagnose symptoms or replace medical advice.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="app-footer">
+        <div>Medicine AI • Learn responsibly • Stay informed</div>
+        <div style="margin-top:7px">Created &amp; developed by <strong>Madhvi</strong> © 2026</div>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<!-- FULL-SCREEN ORGAN EXPLANATION -->
+<div id="bodyModal" role="dialog" aria-modal="true" aria-labelledby="organTitle">
+  <div class="modal-top">
+    <div class="brand">
+      <div class="brand-mark">✚</div>
+      <div>Medicine AI<small style="color:#b9d2df">HUMAN BODY LAB</small></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <select id="modalLanguage" class="modal-lang" onchange="changeLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="pa">ਪੰਜਾਬੀ</option>
+      </select>
+      <button class="modal-close" onclick="closeBodyModal()" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+  <div class="modal-content">
+    <div class="organ-art">
+      <div id="organEmoji" class="organ-emoji">🧠</div>
+      <div id="organLabel" class="organ-label">BRAIN • LEARNING MODE</div>
+    </div>
+    <div class="education-text">
+      <div class="eyebrow">YOUR ANIMATED AI DOCTOR</div>
+      <h2 id="organTitle">The Brain</h2>
+      <p id="organDescription"></p>
+      <div class="doctor-row">
+        <div class="doctor" aria-label="Animated cartoon doctor">
+          <div class="doctor-hair"></div>
+          <div class="doctor-head"></div>
+          <div class="doctor-eyes">• •</div>
+          <div class="doctor-coat"></div>
+          <div class="doctor-tie"></div>
+        </div>
+        <div id="doctorSpeech" class="doctor-speech"></div>
+      </div>
+      <button class="btn btn-primary" onclick="speakOrgan()">🔊 <span data-i18n="listenDoctor">Listen to the doctor</span></button>
+      <button class="btn btn-outline" style="margin-top:10px" onclick="closeBodyModal()" data-i18n="backToBody">← Back to body</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===========================================
+// MEDICINE AI — FRONT-END DEMO
+// ===========================================
+
+const I18N = {
+  en: {
+    home:"Home",workspace:"WORKSPACE",dashboard:"Dashboard",medicines:"Medicine Guide",
+    reminders:"Reminders",pharmacy:"Find Pharmacy",body:"Human Body Lab",more:"MORE",
+    about:"About this project",heroTitle:"Better health knowledge starts here.",
+    heroText:"Explore medicine facts, understand your body, and build helpful reminders for your daily routine.",
+    exploreMeds:"Explore medicines →",sampleMeds:"Sample medicine profiles",
+    savedReminders:"Saved reminders",languages:"Available languages",quickAccess:"Quick access",
+    searchMed:"Search medicine",searchMedText:"Names, uses, compounds and possible side effects.",
+    setReminder:"Set a reminder",setReminderText:"Choose a time and test the spoken reminder.",
+    findPharmacy:"Find a pharmacy",findPharmacyText:"Open a map search for nearby chemists.",
+    exploreBody:"Explore the body",exploreBodyText:"Select an organ to learn with the AI doctor.",
+    healthNote:"A helpful health reminder",
+    healthNoteText:"Medicine information is educational. Always confirm the right medicine, dose, timing, and suitability with a qualified healthcare professional.",
+    referenceLibrary:"REFERENCE LIBRARY",medicineTitle:"Medicine Guide",
+    medicineSubtitle:"Search a medicine to view its generic name, active compound, general uses, possible side effects and cautions.",
+    addReminder:"Add reminder",medicineNotice:"This is a small educational demo database, not a complete drug reference. Brand formulations can vary. Check the active ingredient on the package. Never start, stop, or change a medicine based only on this website.",
+    reminderTitle:"Medicine Reminders",reminderSubtitle:"Save the reminder time and choose the spoken alert volume.",
+    createReminder:"Create a reminder",medicineName:"Medicine name",reminderTime:"Reminder time",
+    optionalNote:"Note (optional)",saveReminder:"＋ Save reminder",dailyNote:"Reminders repeat daily while this website is running.",
+    voiceSettings:"Voice settings",alertVolume:"Alert volume",voiceLanguage:"Reminder language",
+    testVoice:"Test voice reminder",enableAlerts:"Enable browser notifications",
+    voiceNote:"Voice alerts need a supported browser. Keep this page open for reminders; this version does not run alarms when the browser is fully closed.",
+    yourReminders:"Your saved reminders",refresh:"Refresh",noReminders:"No reminders saved yet.",
+    delete:"Delete",test:"Test",pharmacyTitle:"Find a Pharmacy",
+    pharmacySubtitle:"Search a place to see pharmacies and chemists on a map.",
+    searchNearby:"Search pharmacies",cityOrArea:"City, area or PIN code",
+    openMap:"Open pharmacy map →",useLocation:"Use my current location",
+    mapNote:"Map results come from the map provider. Confirm opening hours, stock, and contact details with the pharmacy.",
+    mapSearch:"Map-powered search",mapSearchText:"Search by locality or allow location access in your browser to look for nearby pharmacies.",
+    privacyNote:"Your location is used only after you press the location button. It is not stored by this website.",
+    bodyTitle:"Human Body Lab",bodySubtitle:"Select an organ on the diagram or choose a body part below. The learning screen will zoom in and your animated AI doctor will explain its function.",
+    clickOrgan:"Click an organ",choosePart:"Choose a body part",
+    bodyDiagramNote:"Simplified educational illustration • Not to scale",
+    bodyDisclaimer:"Learning content only. It does not diagnose symptoms or replace medical advice.",
+    listenDoctor:"Listen to the doctor",backToBody:"← Back to body",
+    categoryAll:"All",uses:"General uses",sideEffects:"Possible side effects",
+    generic:"Generic name",compound:"Active compound / salt",
+    cautions:"Important cautions",details:"View details",remind:"Set reminder",
+    noMatches:"No medicines match your search. This demo does not contain every medicine.",
+    medicineCaution:"This overview is not an individual recommendation. Follow the prescription and official patient leaflet.",
+    reminderSaved:"Reminder saved.",reminderDeleted:"Reminder deleted.",
+    notificationReady:"Browser notification permission is enabled if supported.",
+    notificationDenied:"Notifications were not enabled. Check your browser's site settings.",
+    enterPlace:"Enter a city, area or PIN code first.",
+    locationUnsupported:"Your browser does not support location access.",
+    locationDenied:"Location access was not available. Enter a city or area instead.",
+    aboutTitle:"About Medicine AI",
+    aboutText:"Medicine AI is a student-style educational website concept that combines sample medicine information, medicine reminders, pharmacy map search and a simplified human-body learning lab.",
+    aboutWarning:"The medicine database is only a demo. It does not connect to a verified clinical drug database or a pharmacy inventory. Reminders work while the website is open.",
+    reminderMessage:"It's time to take your medicine: ",
+    testMessage:"This is a Medicine AI voice reminder test.",
+    medicine:"Medicine",openMapFailed:"Your browser could not open the map. Please allow pop-ups."
+  },
+  hi: {
+    home:"होम",workspace:"कार्य क्षेत्र",dashboard:"डैशबोर्ड",medicines:"दवा गाइड",
+    reminders:"रिमाइंडर",pharmacy:"फार्मेसी खोजें",body:"मानव शरीर लैब",more:"और जानकारी",
+    about:"प्रोजेक्ट के बारे में",heroTitle:"बेहतर स्वास्थ्य जानकारी यहाँ से शुरू होती है।",
+    heroText:"दवाओं की जानकारी जानें, अपने शरीर को समझें और दैनिक दिनचर्या के लिए रिमाइंडर बनाएँ।",
+    exploreMeds:"दवाएँ देखें →",sampleMeds:"नमूना दवा प्रोफाइल",savedReminders:"सेव किए रिमाइंडर",
+    languages:"उपलब्ध भाषाएँ",quickAccess:"त्वरित पहुँच",searchMed:"दवा खोजें",
+    searchMedText:"नाम, उपयोग, सक्रिय तत्व और संभावित दुष्प्रभाव।",
+    setReminder:"रिमाइंडर सेट करें",setReminderText:"समय चुनें और आवाज़ की जाँच करें।",
+    findPharmacy:"फार्मेसी खोजें",findPharmacyText:"नज़दीकी मेडिकल स्टोर के लिए नक्शा खोलें।",
+    exploreBody:"शरीर के बारे में जानें",exploreBodyText:"AI डॉक्टर के साथ किसी अंग के बारे में जानें।",
+    healthNote:"स्वास्थ्य से जुड़ी उपयोगी सलाह",
+    healthNoteText:"दवा की जानकारी केवल शिक्षा के लिए है। सही दवा, खुराक, समय और उपयुक्तता के लिए योग्य स्वास्थ्य पेशेवर से सलाह लें।",
+    referenceLibrary:"जानकारी संग्रह",medicineTitle:"दवा गाइड",
+    medicineSubtitle:"दवा खोजकर उसका जेनेरिक नाम, सक्रिय तत्व, सामान्य उपयोग, संभावित दुष्प्रभाव और सावधानियाँ देखें।",
+    addReminder:"रिमाइंडर जोड़ें",medicineNotice:"यह एक छोटा शैक्षिक नमूना डेटाबेस है, पूरा दवा-संग्रह नहीं। ब्रांड के अनुसार सामग्री बदल सकती है। पैकेट पर सक्रिय तत्व जाँचें। केवल इस वेबसाइट के आधार पर दवा शुरू, बंद या बदलें नहीं।",
+    reminderTitle:"दवा रिमाइंडर",reminderSubtitle:"रिमाइंडर का समय सेव करें और आवाज़ की मात्रा चुनें।",
+    createReminder:"रिमाइंडर बनाएँ",medicineName:"दवा का नाम",reminderTime:"रिमाइंडर का समय",
+    optionalNote:"नोट (वैकल्पिक)",saveReminder:"＋ रिमाइंडर सेव करें",
+    dailyNote:"वेबसाइट चालू रहने पर रिमाइंडर रोज़ दोहरते हैं।",
+    voiceSettings:"आवाज़ की सेटिंग",alertVolume:"आवाज़ की मात्रा",voiceLanguage:"रिमाइंडर की भाषा",
+    testVoice:"आवाज़ जाँचें",enableAlerts:"ब्राउज़र नोटिफिकेशन चालू करें",
+    voiceNote:"आवाज़ के लिए समर्थित ब्राउज़र चाहिए। रिमाइंडर के लिए पेज खुला रखें; ब्राउज़र पूरी तरह बंद होने पर अलार्म नहीं चलेगा।",
+    yourReminders:"आपके रिमाइंडर",refresh:"रिफ्रेश",noReminders:"अभी कोई रिमाइंडर सेव नहीं है।",
+    delete:"हटाएँ",test:"जाँचें",pharmacyTitle:"फार्मेसी खोजें",
+    pharmacySubtitle:"नक्शे पर फार्मेसी और मेडिकल स्टोर खोजें।",searchNearby:"फार्मेसी खोजें",
+    cityOrArea:"शहर, इलाका या पिन कोड",openMap:"फार्मेसी का नक्शा खोलें →",
+    useLocation:"मेरी वर्तमान लोकेशन का उपयोग करें",
+    mapNote:"नक्शे के परिणाम सेवा प्रदाता से आते हैं। समय, उपलब्ध दवा और संपर्क की पुष्टि फार्मेसी से करें।",
+    mapSearch:"नक्शे से खोजें",mapSearchText:"इलाका खोजें या नज़दीकी फार्मेसी देखने के लिए लोकेशन की अनुमति दें।",
+    privacyNote:"आपकी लोकेशन केवल बटन दबाने के बाद उपयोग होती है। यह वेबसाइट इसे सेव नहीं करती।",
+    bodyTitle:"मानव शरीर लैब",bodySubtitle:"चित्र में किसी अंग पर क्लिक करें या नीचे से चुनें। स्क्रीन उस अंग पर ज़ूम करेगी और AI डॉक्टर उसका काम समझाएगा।",
+    clickOrgan:"किसी अंग पर क्लिक करें",choosePart:"शरीर का अंग चुनें",
+    bodyDiagramNote:"सरल शैक्षिक चित्र • वास्तविक माप के अनुसार नहीं",
+    bodyDisclaimer:"यह केवल शैक्षिक जानकारी है, निदान या चिकित्सा सलाह नहीं।",
+    listenDoctor:"डॉक्टर की बात सुनें",backToBody:"← शरीर पर वापस जाएँ",
+    categoryAll:"सभी",uses:"सामान्य उपयोग",sideEffects:"संभावित दुष्प्रभाव",
+    generic:"जेनेरिक नाम",compound:"सक्रिय तत्व / साल्ट",cautions:"महत्वपूर्ण सावधानियाँ",
+    details:"जानकारी देखें",remind:"रिमाइंडर सेट करें",
+    noMatches:"आपकी खोज से मेल खाने वाली दवा नहीं मिली। इस नमूने में सभी दवाएँ नहीं हैं।",
+    medicineCaution:"यह व्यक्तिगत सलाह नहीं है। डॉक्टर के पर्चे और आधिकारिक जानकारी का पालन करें।",
+    reminderSaved:"रिमाइंडर सेव हो गया।",reminderDeleted:"रिमाइंडर हटा दिया गया।",
+    notificationReady:"यदि समर्थित है तो ब्राउज़र नोटिफिकेशन की अनुमति चालू है।",
+    notificationDenied:"नोटिफिकेशन चालू नहीं हुए। ब्राउज़र की साइट सेटिंग जाँचें।",
+    enterPlace:"पहले शहर, इलाका या पिन कोड दर्ज करें।",
+    locationUnsupported:"आपका ब्राउज़र लोकेशन की सुविधा नहीं देता।",
+    locationDenied:"लोकेशन नहीं मिल सकी। इसके बजाय शहर या इलाका दर्ज करें।",
+    aboutTitle:"Medicine AI के बारे में",
+    aboutText:"Medicine AI एक शैक्षिक वेबसाइट का नमूना है। इसमें दवाओं की नमूना जानकारी, रिमाइंडर, फार्मेसी नक्शा और मानव शरीर सीखने की सुविधा है।",
+    aboutWarning:"दवा डेटाबेस केवल नमूना है। यह किसी प्रमाणित चिकित्सा डेटाबेस या फार्मेसी स्टॉक से जुड़ा नहीं है। रिमाइंडर वेबसाइट खुली रहने पर काम करते हैं।",
+    reminderMessage:"आपकी दवा लेने का समय हो गया है: ",
+    testMessage:"यह Medicine AI आवाज़ रिमाइंडर की जाँच है।",
+    medicine:"दवा",openMapFailed:"नक्शा नहीं खुल सका। ब्राउज़र में पॉप-अप की अनुमति दें।"
+  },
+  pa: {
+    home:"ਮੁੱਖ ਪੰਨਾ",workspace:"ਕੰਮ ਵਾਲਾ ਹਿੱਸਾ",dashboard:"ਡੈਸ਼ਬੋਰਡ",
+    medicines:"ਦਵਾਈ ਗਾਈਡ",reminders:"ਯਾਦ ਦਿਵਾਉਣ ਵਾਲੇ ਅਲਰਟ",
+    pharmacy:"ਫਾਰਮੇਸੀ ਲੱਭੋ",body:"ਮਨੁੱਖੀ ਸਰੀਰ ਲੈਬ",more:"ਹੋਰ",
+    about:"ਇਸ ਪ੍ਰੋਜੈਕਟ ਬਾਰੇ",heroTitle:"ਬਿਹਤਰ ਸਿਹਤ ਜਾਣਕਾਰੀ ਇੱਥੋਂ ਸ਼ੁਰੂ ਹੁੰਦੀ ਹੈ।",
+    heroText:"ਦਵਾਈਆਂ ਬਾਰੇ ਜਾਣੋ, ਆਪਣੇ ਸਰੀਰ ਨੂੰ ਸਮਝੋ ਅਤੇ ਰੋਜ਼ਾਨਾ ਲਈ ਰਿਮਾਈਂਡਰ ਬਣਾਓ।",
+    exploreMeds:"ਦਵਾਈਆਂ ਵੇਖੋ →",sampleMeds:"ਨਮੂਨਾ ਦਵਾਈ ਜਾਣਕਾਰੀ",
+    savedReminders:"ਸੇਵ ਕੀਤੇ ਰਿਮਾਈਂਡਰ",languages:"ਉਪਲਬਧ ਭਾਸ਼ਾਵਾਂ",
+    quickAccess:"ਤੁਰੰਤ ਪਹੁੰਚ",searchMed:"ਦਵਾਈ ਲੱਭੋ",
+    searchMedText:"ਨਾਮ, ਵਰਤੋਂ, ਕਿਰਿਆਸ਼ੀਲ ਤੱਤ ਅਤੇ ਸੰਭਾਵੀ ਮਾੜੇ ਪ੍ਰਭਾਵ।",
+    setReminder:"ਰਿਮਾਈਂਡਰ ਲਗਾਓ",setReminderText:"ਸਮਾਂ ਚੁਣੋ ਅਤੇ ਆਵਾਜ਼ ਦੀ ਜਾਂਚ ਕਰੋ।",
+    findPharmacy:"ਫਾਰਮੇਸੀ ਲੱਭੋ",findPharmacyText:"ਨੇੜੇ ਦੀਆਂ ਫਾਰਮੇਸੀਆਂ ਲਈ ਨਕਸ਼ਾ ਖੋਲ੍ਹੋ।",
+    exploreBody:"ਸਰੀਰ ਬਾਰੇ ਜਾਣੋ",exploreBodyText:"AI ਡਾਕਟਰ ਨਾਲ ਕਿਸੇ ਅੰਗ ਦਾ ਕੰਮ ਜਾਣੋ।",
+    healthNote:"ਸਿਹਤ ਬਾਰੇ ਜ਼ਰੂਰੀ ਗੱਲ",
+    healthNoteText:"ਦਵਾਈ ਦੀ ਜਾਣਕਾਰੀ ਸਿਰਫ਼ ਸਿੱਖਿਆ ਲਈ ਹੈ। ਸਹੀ ਦਵਾਈ, ਖੁਰਾਕ, ਸਮਾਂ ਅਤੇ ਉਚਿਤਤਾ ਲਈ ਯੋਗ ਸਿਹਤ ਮਾਹਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+    referenceLibrary:"ਜਾਣਕਾਰੀ ਸੰਗ੍ਰਹਿ",medicineTitle:"ਦਵਾਈ ਗਾਈਡ",
+    medicineSubtitle:"ਦਵਾਈ ਲੱਭ ਕੇ ਉਸਦਾ ਜੈਨਰਿਕ ਨਾਮ, ਕਿਰਿਆਸ਼ੀਲ ਤੱਤ, ਆਮ ਵਰਤੋਂ, ਸੰਭਾਵੀ ਮਾੜੇ ਪ੍ਰਭਾਵ ਅਤੇ ਸਾਵਧਾਨੀਆਂ ਵੇਖੋ।",
+    addReminder:"ਰਿਮਾਈਂਡਰ ਜੋੜੋ",medicineNotice:"ਇਹ ਸਿਰਫ਼ ਸਿੱਖਿਆ ਲਈ ਇੱਕ ਛੋਟਾ ਨਮੂਨਾ ਡੇਟਾਬੇਸ ਹੈ। ਹਰ ਦਵਾਈ ਇਸ ਵਿੱਚ ਨਹੀਂ ਹੈ। ਬ੍ਰਾਂਡ ਅਨੁਸਾਰ ਤੱਤ ਵੱਖ ਹੋ ਸਕਦੇ ਹਨ। ਪੈਕ ਉੱਤੇ ਕਿਰਿਆਸ਼ੀਲ ਤੱਤ ਜਾਂਚੋ। ਸਿਰਫ਼ ਇਸ ਵੈੱਬਸਾਈਟ ਦੇ ਆਧਾਰ 'ਤੇ ਦਵਾਈ ਸ਼ੁਰੂ, ਬੰਦ ਜਾਂ ਬਦਲੋ ਨਾ।",
+    reminderTitle:"ਦਵਾਈ ਰਿਮਾਈਂਡਰ",reminderSubtitle:"ਰਿਮਾਈਂਡਰ ਦਾ ਸਮਾਂ ਸੇਵ ਕਰੋ ਅਤੇ ਆਵਾਜ਼ ਦੀ ਮਾਤਰਾ ਚੁਣੋ।",
+    createReminder:"ਰਿਮਾਈਂਡਰ ਬਣਾਓ",medicineName:"ਦਵਾਈ ਦਾ ਨਾਮ",reminderTime:"ਰਿਮਾਈਂਡਰ ਦਾ ਸਮਾਂ",
+    optionalNote:"ਨੋਟ (ਚੋਣਵਾਂ)",saveReminder:"＋ ਰਿਮਾਈਂਡਰ ਸੇਵ ਕਰੋ",
+    dailyNote:"ਵੈੱਬਸਾਈਟ ਚੱਲਣ ਸਮੇਂ ਰਿਮਾਈਂਡਰ ਰੋਜ਼ ਦੁਹਰਾਏ ਜਾਣਗੇ।",
+    voiceSettings:"ਆਵਾਜ਼ ਸੈਟਿੰਗਾਂ",alertVolume:"ਆਵਾਜ਼ ਦੀ ਮਾਤਰਾ",
+    voiceLanguage:"ਰਿਮਾਈਂਡਰ ਦੀ ਭਾਸ਼ਾ",testVoice:"ਆਵਾਜ਼ ਦੀ ਜਾਂਚ ਕਰੋ",
+    enableAlerts:"ਬ੍ਰਾਊਜ਼ਰ ਨੋਟੀਫਿਕੇਸ਼ਨ ਚਾਲੂ ਕਰੋ",
+    voiceNote:"ਆਵਾਜ਼ ਲਈ ਸਮਰਥਿਤ ਬ੍ਰਾਊਜ਼ਰ ਲੋੜੀਂਦਾ ਹੈ। ਰਿਮਾਈਂਡਰ ਲਈ ਪੰਨਾ ਖੁੱਲ੍ਹਾ ਰੱਖੋ; ਬ੍ਰਾਊਜ਼ਰ ਪੂਰੀ ਤਰ੍ਹਾਂ ਬੰਦ ਹੋਣ 'ਤੇ ਅਲਾਰਮ ਨਹੀਂ ਚੱਲੇਗਾ।",
+    yourReminders:"ਤੁਹਾਡੇ ਰਿਮਾਈਂਡਰ",refresh:"ਤਾਜ਼ਾ ਕਰੋ",noReminders:"ਹਾਲੇ ਕੋਈ ਰਿਮਾਈਂਡਰ ਸੇਵ ਨਹੀਂ ਹੈ।",
+    delete:"ਮਿਟਾਓ",test:"ਜਾਂਚੋ",pharmacyTitle:"ਫਾਰਮੇਸੀ ਲੱਭੋ",
+    pharmacySubtitle:"ਨਕਸ਼ੇ 'ਤੇ ਫਾਰਮੇਸੀਆਂ ਅਤੇ ਮੈਡੀਕਲ ਸਟੋਰ ਲੱਭੋ।",
+    searchNearby:"ਫਾਰਮੇਸੀਆਂ ਲੱਭੋ",cityOrArea:"ਸ਼ਹਿਰ, ਇਲਾਕਾ ਜਾਂ ਪਿੰਨ ਕੋਡ",
+    openMap:"ਫਾਰਮੇਸੀ ਦਾ ਨਕਸ਼ਾ ਖੋਲ੍ਹੋ →",useLocation:"ਮੇਰੀ ਮੌਜੂਦਾ ਲੋਕੇਸ਼ਨ ਵਰਤੋ",
+    mapNote:"ਨਕਸ਼ੇ ਦੇ ਨਤੀਜੇ ਨਕਸ਼ਾ ਸੇਵਾ ਤੋਂ ਹਨ। ਸਮਾਂ, ਦਵਾਈ ਦੀ ਉਪਲਬਧਤਾ ਅਤੇ ਸੰਪਰਕ ਦੀ ਪੁਸ਼ਟੀ ਸਟੋਰ ਨਾਲ ਕਰੋ।",
+    mapSearch:"ਨਕਸ਼ੇ ਰਾਹੀਂ ਖੋਜ",mapSearchText:"ਇਲਾਕਾ ਲੱਭੋ ਜਾਂ ਨੇੜਲੀਆਂ ਫਾਰਮੇਸੀਆਂ ਲਈ ਲੋਕੇਸ਼ਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ।",
+    privacyNote:"ਤੁਹਾਡੀ ਲੋਕੇਸ਼ਨ ਬਟਨ ਦਬਾਉਣ ਤੋਂ ਬਾਅਦ ਹੀ ਵਰਤੀ ਜਾਂਦੀ ਹੈ। ਇਹ ਵੈੱਬਸਾਈਟ ਇਸਨੂੰ ਸੇਵ ਨਹੀਂ ਕਰਦੀ।",
+    bodyTitle:"ਮਨੁੱਖੀ ਸਰੀਰ ਲੈਬ",bodySubtitle:"ਚਿੱਤਰ ਵਿੱਚ ਕਿਸੇ ਅੰਗ ਉੱਤੇ ਕਲਿੱਕ ਕਰੋ ਜਾਂ ਹੇਠਾਂ ਚੁਣੋ। ਸਕ੍ਰੀਨ ਉਸ ਅੰਗ 'ਤੇ ਜ਼ੂਮ ਕਰੇਗੀ ਅਤੇ AI ਡਾਕਟਰ ਉਸਦਾ ਕੰਮ ਸਮਝਾਏਗਾ।",
+    clickOrgan:"ਕਿਸੇ ਅੰਗ ਉੱਤੇ ਕਲਿੱਕ ਕਰੋ",choosePart:"ਸਰੀਰ ਦਾ ਅੰਗ ਚੁਣੋ",
+    bodyDiagramNote:"ਸਰਲ ਸਿੱਖਿਆਤਮਕ ਚਿੱਤਰ • ਅਸਲ ਮਾਪ ਅਨੁਸਾਰ ਨਹੀਂ",
+    bodyDisclaimer:"ਇਹ ਸਿਰਫ਼ ਸਿੱਖਿਆ ਲਈ ਹੈ, ਡਾਕਟਰੀ ਜਾਂਚ ਜਾਂ ਸਲਾਹ ਨਹੀਂ।",
+    listenDoctor:"ਡਾਕਟਰ ਦੀ ਗੱਲ ਸੁਣੋ",backToBody:"← ਸਰੀਰ ਵੱਲ ਵਾਪਸ",
+    categoryAll:"ਸਾਰੇ",uses:"ਆਮ ਵਰਤੋਂ",sideEffects:"ਸੰਭਾਵੀ ਮਾੜੇ ਪ੍ਰਭਾਵ",
+    generic:"ਜੈਨਰਿਕ ਨਾਮ",compound:"ਕਿਰਿਆਸ਼ੀਲ ਤੱਤ / ਸਾਲਟ",
+    cautions:"ਜ਼ਰੂਰੀ ਸਾਵਧਾਨੀਆਂ",details:"ਵੇਰਵਾ ਵੇਖੋ",remind:"ਰਿਮਾਈਂਡਰ ਲਗਾਓ",
+    noMatches:"ਤੁਹਾਡੀ ਖੋਜ ਨਾਲ ਮਿਲਦੀ ਦਵਾਈ ਨਹੀਂ ਮਿਲੀ। ਇਸ ਨਮੂਨੇ ਵਿੱਚ ਸਾਰੀਆਂ ਦਵਾਈਆਂ ਨਹੀਂ ਹਨ।",
+    medicineCaution:"ਇਹ ਨਿੱਜੀ ਡਾਕਟਰੀ ਸਲਾਹ ਨਹੀਂ ਹੈ। ਡਾਕਟਰ ਦੇ ਨੁਸਖੇ ਅਤੇ ਅਧਿਕਾਰਤ ਜਾਣਕਾਰੀ ਦੀ ਪਾਲਣਾ ਕਰੋ।",
+    reminderSaved:"ਰਿਮਾਈਂਡਰ ਸੇਵ ਹੋ ਗਿਆ।",reminderDeleted:"ਰਿਮਾਈਂਡਰ ਮਿਟਾ ਦਿੱਤਾ ਗਿਆ।",
+    notificationReady:"ਜੇ ਸਮਰਥਿਤ ਹੈ ਤਾਂ ਬ੍ਰਾਊਜ਼ਰ ਨੋਟੀਫਿਕੇਸ਼ਨ ਦੀ ਇਜਾਜ਼ਤ ਚਾਲੂ ਹੈ।",
+    notificationDenied:"ਨੋਟੀਫਿਕੇਸ਼ਨ ਚਾਲੂ ਨਹੀਂ ਹੋਏ। ਬ੍ਰਾਊਜ਼ਰ ਦੀਆਂ ਸਾਈਟ ਸੈਟਿੰਗਾਂ ਵੇਖੋ।",
+    enterPlace:"ਪਹਿਲਾਂ ਸ਼ਹਿਰ, ਇਲਾਕਾ ਜਾਂ ਪਿੰਨ ਕੋਡ ਲਿਖੋ।",
+    locationUnsupported:"ਤੁਹਾਡਾ ਬ੍ਰਾਊਜ਼ਰ ਲੋਕੇਸ਼ਨ ਸਹੂਲਤ ਨਹੀਂ ਦਿੰਦਾ।",
+    locationDenied:"ਲੋਕੇਸ਼ਨ ਨਹੀਂ ਮਿਲ ਸਕੀ। ਇਸਦੀ ਥਾਂ ਸ਼ਹਿਰ ਜਾਂ ਇਲਾਕਾ ਲਿਖੋ।",
+    aboutTitle:"Medicine AI ਬਾਰੇ",
+    aboutText:"Medicine AI ਇੱਕ ਸਿੱਖਿਆਤਮਕ ਵੈੱਬਸਾਈਟ ਦਾ ਨਮੂਨਾ ਹੈ। ਇਸ ਵਿੱਚ ਦਵਾਈਆਂ ਦੀ ਨਮੂਨਾ ਜਾਣਕਾਰੀ, ਰਿਮਾਈਂਡਰ, ਫਾਰਮੇਸੀ ਨਕਸ਼ਾ ਅਤੇ ਮਨੁੱਖੀ ਸਰੀਰ ਬਾਰੇ ਸਿੱਖਣ ਦੀ ਸਹੂਲਤ ਹੈ।",
+    aboutWarning:"ਦਵਾਈਆਂ ਦਾ ਡੇਟਾਬੇਸ ਸਿਰਫ਼ ਨਮੂਨਾ ਹੈ। ਇਹ ਕਿਸੇ ਪ੍ਰਮਾਣਿਤ ਮੈਡੀਕਲ ਡੇਟਾਬੇਸ ਜਾਂ ਫਾਰਮੇਸੀ ਸਟਾਕ ਨਾਲ ਨਹੀਂ ਜੁੜਿਆ। ਰਿਮਾਈਂਡਰ ਵੈੱਬਸਾਈਟ ਖੁੱਲ੍ਹੀ ਹੋਣ 'ਤੇ ਕੰਮ ਕਰਦੇ ਹਨ।",
+    reminderMessage:"ਤੁਹਾਡੀ ਦਵਾਈ ਲੈਣ ਦਾ ਸਮਾਂ ਹੋ ਗਿਆ ਹੈ: ",
+    testMessage:"ਇਹ Medicine AI ਆਵਾਜ਼ ਰਿਮਾਈਂਡਰ ਦੀ ਜਾਂਚ ਹੈ।",
+    medicine:"ਦਵਾਈ",openMapFailed:"ਨਕਸ਼ਾ ਨਹੀਂ ਖੁੱਲ੍ਹ ਸਕਿਆ। ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਪੌਪ-ਅੱਪ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ।"
+  }
+};
+
+let currentLang = "en";
+const tr = key => (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
+
+function changeLanguage(lang) {
+  currentLang = I18N[lang] ? lang : "en";
+  document.documentElement.lang = currentLang;
+  document.getElementById("language").value = currentLang;
+  document.getElementById("modalLanguage").value = currentLang;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    if (tr(key)) el.textContent = tr(key);
+  });
+  document.getElementById("voiceStyle").value = currentLang;
+  const search = document.getElementById("medSearch");
+  search.placeholder = currentLang==="hi" ? "दवा का नाम, जेनेरिक नाम या श्रेणी खोजें..." :
+    currentLang==="pa" ? "ਦਵਾਈ ਦਾ ਨਾਮ ਜਾਂ ਕਿਸਮ ਲੱਭੋ..." :
+    "Search a medicine, generic name or category...";
+  renderCategoryChips();
+  renderMedicines();
+  renderReminders();
+  renderBodyParts();
+  if (activeOrgan) openOrgan(activeOrgan, false);
+}
+
+function enterApp() {
+  document.getElementById("welcome").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  renderMedicines();
+  renderReminders();
+  renderBodyParts();
+}
+
+function showView(name) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  const section = document.getElementById("view-" + name);
+  if (section) section.classList.add("active");
+  document.querySelectorAll(".nav-btn[data-view]").forEach(b => {
+    b.classList.toggle("active", b.dataset.view === name);
+  });
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showAbout() {
+  alert(tr("aboutTitle") + "\n\n" + tr("aboutText") + "\n\n" + tr("aboutWarning") +
+        "\n\nCreated & developed by Madhvi");
+}
+
+// Medicine data: concise educational examples, not a prescribing database.
+const medicines = [
+  {
+    id:"paracetamol",name:"Paracetamol",generic:"Paracetamol (acetaminophen)",
+    compound:"N-(4-hydroxyphenyl)acetamide",
+    category:"Pain & fever",emoji:"🌡️",
+    names:["paracetamol","acetaminophen","pain","fever"],
+    uses:{
+      en:"Used to relieve mild to moderate pain and reduce fever.",
+      hi:"हल्के से मध्यम दर्द से राहत और बुखार कम करने के लिए उपयोग किया जाता है।",
+      pa:"ਹਲਕੇ ਤੋਂ ਦਰਮਿਆਨੇ ਦਰਦ ਤੋਂ ਰਾਹਤ ਅਤੇ ਬੁਖਾਰ ਘਟਾਉਣ ਲਈ ਵਰਤੀ ਜਾਂਦੀ ਹੈ।"},
+    effects:{
+      en:"Possible side effects include nausea or rash. Too much can cause serious liver damage.",
+      hi:"मतली या त्वचा पर दाने हो सकते हैं। अधिक मात्रा से लिवर को गंभीर नुकसान हो सकता है।",
+      pa:"ਮਤਲੀ ਜਾਂ ਚਮੜੀ 'ਤੇ ਧੱਫੜ ਹੋ ਸਕਦੇ ਹਨ। ਵੱਧ ਮਾਤਰਾ ਜਿਗਰ ਨੂੰ ਗੰਭੀਰ ਨੁਕਸਾਨ ਪਹੁੰਚਾ ਸਕਦੀ ਹੈ।"},
+    caution:{
+      en:"Check all products for duplicate paracetamol. Ask a professional if you have liver disease or drink alcohol.",
+      hi:"अन्य दवाओं में भी पैरासिटामोल हो सकता है। लिवर की बीमारी होने पर स्वास्थ्य पेशेवर से सलाह लें।",
+      pa:"ਹੋਰ ਦਵਾਈਆਂ ਵਿੱਚ ਵੀ ਪੈਰਾਸੀਟਾਮੋਲ ਹੋ ਸਕਦਾ ਹੈ। ਜਿਗਰ ਦੀ ਬਿਮਾਰੀ ਹੋਵੇ ਤਾਂ ਮਾਹਰ ਦੀ ਸਲਾਹ ਲਵੋ।"}
+  },
+  {
+    id:"metformin",name:"Metformin",generic:"Metformin",
+    compound:"Metformin hydrochloride",
+    category:"Blood sugar",emoji:"🩸",
+    names:["metformin","sugar","diabetes","blood sugar"],
+    uses:{en:"Used with a care plan to help manage blood glucose in type 2 diabetes.",
+      hi:"टाइप 2 डायबिटीज़ में रक्त शर्करा नियंत्रित करने की योजना के हिस्से के रूप में उपयोग होती है।",
+      pa:"ਟਾਈਪ 2 ਸ਼ੂਗਰ ਵਿੱਚ ਖੂਨ ਦੀ ਸ਼ੱਕਰ ਨੂੰ ਸੰਭਾਲਣ ਲਈ ਇਲਾਜ ਯੋਜਨਾ ਦੇ ਹਿੱਸੇ ਵਜੋਂ ਵਰਤੀ ਜਾਂਦੀ ਹੈ।"},
+    effects:{en:"Common effects include diarrhoea, nausea and abdominal discomfort. Rarely, a serious condition called lactic acidosis can occur.",
+      hi:"दस्त, मतली और पेट में परेशानी हो सकती है। बहुत कम मामलों में लैक्टिक एसिडोसिस जैसी गंभीर स्थिति हो सकती है।",
+      pa:"ਦਸਤ, ਮਤਲੀ ਅਤੇ ਪੇਟ ਵਿੱਚ ਬੇਆਰਾਮੀ ਹੋ ਸਕਦੀ ਹੈ। ਕਦੇ-ਕਦਾਈਂ ਲੈਕਟਿਕ ਐਸਿਡੋਸਿਸ ਵਰਗੀ ਗੰਭੀਰ ਹਾਲਤ ਹੋ ਸਕਦੀ ਹੈ।"},
+    caution:{en:"Kidney function, other illnesses and contrast scans may affect its safe use. Follow your prescriber's advice.",
+      hi:"किडनी की कार्यक्षमता और कुछ जाँचें इसके सुरक्षित उपयोग को प्रभावित कर सकती हैं। डॉक्टर की सलाह मानें।",
+      pa:"ਗੁਰਦਿਆਂ ਦੀ ਕਾਰਗੁਜ਼ਾਰੀ ਅਤੇ ਕੁਝ ਸਕੈਨ ਇਸਦੀ ਸੁਰੱਖਿਅਤ ਵਰਤੋਂ ਨੂੰ ਪ੍ਰਭਾਵਿਤ ਕਰ ਸਕਦੇ ਹਨ। ਡਾਕਟਰ ਦੀ ਸਲਾਹ ਮੰਨੋ।"}
+  },
+  {
+    id:"amlodipine",name:"Amlodipine",generic:"Amlodipine",
+    compound:"Amlodipine besylate (common salt form)",
+    category:"Heart & blood pressure",emoji:"❤️",
+    names:["amlodipine","blood pressure","heart","hypertension"],
+    uses:{en:"Used to treat high blood pressure and certain types of chest pain.",
+      hi:"उच्च रक्तचाप और कुछ प्रकार के सीने के दर्द के उपचार में उपयोग होती है।",
+      pa:"ਉੱਚੇ ਬਲੱਡ ਪ੍ਰੈਸ਼ਰ ਅਤੇ ਛਾਤੀ ਦੇ ਦਰਦ ਦੀਆਂ ਕੁਝ ਕਿਸਮਾਂ ਦੇ ਇਲਾਜ ਵਿੱਚ ਵਰਤੀ ਜਾਂਦੀ ਹੈ।"},
+    effects:{en:"Possible effects include ankle swelling, dizziness, flushing or headache.",
+      hi:"टखनों में सूजन, चक्कर, चेहरा लाल होना या सिरदर्द हो सकता है।",
+      pa:"ਗਿੱਟਿਆਂ ਵਿੱਚ ਸੋਜ, ਚੱਕਰ, ਚਿਹਰਾ ਲਾਲ ਹੋਣਾ ਜਾਂ ਸਿਰਦਰਦ ਹੋ ਸਕਦਾ ਹੈ।"},
+    caution:{en:"Do not change blood pressure medicine without medical advice. Seek urgent care for severe or unusual symptoms.",
+      hi:"डॉक्टर की सलाह के बिना रक्तचाप की दवा न बदलें। गंभीर या असामान्य लक्षणों में तुरंत चिकित्सा सहायता लें।",
+      pa:"ਡਾਕਟਰ ਦੀ ਸਲਾਹ ਤੋਂ ਬਿਨਾਂ ਬਲੱਡ ਪ੍ਰੈਸ਼ਰ ਦੀ ਦਵਾਈ ਨਾ ਬਦਲੋ। ਗੰਭੀਰ ਲੱਛਣਾਂ ਵਿੱਚ ਤੁਰੰਤ ਮਦਦ ਲਵੋ।"}
+  },
+  {
+    id:"atorvastatin",name:"Atorvastatin",generic:"Atorvastatin",
+    compound:"Atorvastatin calcium",
+    category:"Heart & cholesterol",emoji:"🫀",
+    names:["atorvastatin","cholesterol","heart","statin"],
+    uses:{en:"Helps lower LDL cholesterol and reduce cardiovascular risk for suitable patients.",
+      hi:"उपयुक्त मरीजों में LDL कोलेस्ट्रॉल कम करने और हृदय संबंधी जोखिम घटाने में मदद करती है।",
+      pa:"ਉਚਿਤ ਮਰੀਜ਼ਾਂ ਵਿੱਚ LDL ਕੋਲੇਸਟਰੋਲ ਘਟਾਉਣ ਅਤੇ ਦਿਲ ਦੀ ਬਿਮਾਰੀ ਦਾ ਜੋਖਮ ਘਟਾਉਣ ਵਿੱਚ ਮਦਦ ਕਰਦੀ ਹੈ।"},
+    effects:{en:"Muscle aches or stomach upset can occur. Unexplained muscle pain or weakness needs prompt medical advice.",
+      hi:"मांसपेशियों में दर्द या पेट की परेशानी हो सकती है। बिना कारण मांसपेशियों में दर्द या कमजोरी हो तो डॉक्टर से संपर्क करें।",
+      pa:"ਮਾਸਪੇਸ਼ੀਆਂ ਵਿੱਚ ਦਰਦ ਜਾਂ ਪੇਟ ਦੀ ਪਰੇਸ਼ਾਨੀ ਹੋ ਸਕਦੀ ਹੈ। ਬਿਨਾਂ ਕਾਰਨ ਮਾਸਪੇਸ਼ੀਆਂ ਦਾ ਦਰਦ ਜਾਂ ਕਮਜ਼ੋਰੀ ਹੋਵੇ ਤਾਂ ਡਾਕਟਰੀ ਸਲਾਹ ਲਵੋ।"},
+    caution:{en:"Tell your clinician about other medicines and pregnancy or pregnancy plans.",
+      hi:"अन्य दवाओं और गर्भावस्था या गर्भधारण की योजना के बारे में डॉक्टर को बताएँ।",
+      pa:"ਹੋਰ ਦਵਾਈਆਂ ਅਤੇ ਗਰਭ ਅਵਸਥਾ ਜਾਂ ਗਰਭਧਾਰਣ ਦੀ ਯੋਜਨਾ ਬਾਰੇ ਡਾਕਟਰ ਨੂੰ ਦੱਸੋ।"}
+  },
+  {
+    id:"amoxicillin",name:"Amoxicillin",generic:"Amoxicillin",
+    compound:"Amoxicillin trihydrate (common form)",
+    category:"Antibiotic",emoji:"🦠",
+    names:["amoxicillin","antibiotic","infection","bacteria"],
+    uses:{en:"A penicillin-type antibiotic used for certain bacterial infections when prescribed.",
+      hi:"यह पेनिसिलिन प्रकार की एंटीबायोटिक है, जो डॉक्टर द्वारा चुने गए कुछ बैक्टीरियल संक्रमणों में उपयोग होती है।",
+      pa:"ਇਹ ਪੈਨਿਸਿਲਿਨ ਕਿਸਮ ਦੀ ਐਂਟੀਬਾਇਓਟਿਕ ਹੈ ਜੋ ਡਾਕਟਰ ਵੱਲੋਂ ਚੁਣੇ ਕੁਝ ਬੈਕਟੀਰੀਆ ਸੰਕਰਮਣਾਂ ਲਈ ਵਰਤੀ ਜਾਂਦੀ ਹੈ।"},
+    effects:{en:"May cause nausea, diarrhoea or rash. Severe allergy can cause breathing difficulty or swelling.",
+      hi:"मतली, दस्त या दाने हो सकते हैं। गंभीर एलर्जी में साँस लेने में परेशानी या सूजन हो सकती है।",
+      pa:"ਮਤਲੀ, ਦਸਤ ਜਾਂ ਧੱਫੜ ਹੋ ਸਕਦੇ ਹਨ। ਗੰਭੀਰ ਐਲਰਜੀ ਵਿੱਚ ਸਾਹ ਲੈਣ ਵਿੱਚ ਮੁਸ਼ਕਲ ਜਾਂ ਸੋਜ ਹੋ ਸਕਦੀ ਹੈ।"},
+    caution:{en:"Use only when prescribed. It does not treat viral colds or flu. Tell your clinician about penicillin allergy.",
+      hi:"केवल डॉक्टर के पर्चे पर लें। यह वायरल सर्दी या फ्लू का इलाज नहीं करती। पेनिसिलिन एलर्जी के बारे में बताएँ।",
+      pa:"ਸਿਰਫ਼ ਡਾਕਟਰ ਦੇ ਨੁਸਖੇ ਅਨੁਸਾਰ ਵਰਤੋ। ਇਹ ਵਾਇਰਲ ਜ਼ੁਕਾਮ ਜਾਂ ਫਲੂ ਦਾ ਇਲਾਜ ਨਹੀਂ ਕਰਦੀ। ਪੈਨਿਸਿਲਿਨ ਐਲਰਜੀ ਦੱਸੋ।"}
+  },
+  {
+    id:"omeprazole",name:"Omeprazole",generic:"Omeprazole",
+    compound:"Omeprazole (active ingredient)",
+    category:"Stomach & acidity",emoji:"🫃",
+    names:["omeprazole","acidity","stomach","gas","reflux"],
+    uses:{en:"Reduces stomach acid and is used for certain acid-related conditions.",
+      hi:"पेट का एसिड कम करती है और कुछ एसिड-संबंधी समस्याओं में उपयोग होती है।",
+      pa:"ਇਹ ਪੇਟ ਦਾ ਐਸਿਡ ਘਟਾਉਂਦੀ ਹੈ ਅਤੇ ਕੁਝ ਐਸਿਡ ਨਾਲ ਜੁੜੀਆਂ ਸਮੱਸਿਆਵਾਂ ਲਈ ਵਰਤੀ ਜਾਂਦੀ ਹੈ।"},
+    effects:{en:"Headache, stomach pain, nausea, constipation or diarrhoea may occur.",
+      hi:"सिरदर्द, पेट दर्द, मतली, कब्ज या दस्त हो सकते हैं।",
+      pa:"ਸਿਰਦਰਦ, ਪੇਟ ਦਰਦ, ਮਤਲੀ, ਕਬਜ਼ ਜਾਂ ਦਸਤ ਹੋ ਸਕਦੇ ਹਨ।"},
+    caution:{en:"Long-term use should be reviewed by a clinician. A brand name alone does not confirm the active ingredient.",
+      hi:"लंबे समय तक उपयोग की डॉक्टर से समीक्षा करवाएँ। केवल ब्रांड नाम से सक्रिय तत्व की पुष्टि नहीं होती।",
+      pa:"ਲੰਬੇ ਸਮੇਂ ਦੀ ਵਰਤੋਂ ਬਾਰੇ ਡਾਕਟਰ ਨਾਲ ਸਮੀਖਿਆ ਕਰੋ। ਸਿਰਫ਼ ਬ੍ਰਾਂਡ ਨਾਮ ਨਾਲ ਕਿਰਿਆਸ਼ੀਲ ਤੱਤ ਦੀ ਪੁਸ਼ਟੀ ਨਹੀਂ ਹੁੰਦੀ।"}
+  },
+  {
+    id:"calcium",name:"Calcium carbonate",generic:"Calcium carbonate",
+    compound:"Calcium carbonate (CaCO₃)",
+    category:"Calcium & bones",emoji:"🦴",
+    names:["calcium","calcium carbonate","bones","bone health"],
+    uses:{en:"Provides calcium in products used for supplementation or, in some formulations, acid relief.",
+      hi:"कैल्शियम की पूर्ति के लिए और कुछ उत्पादों में एसिड से राहत के लिए उपयोग होता है।",
+      pa:"ਕੈਲਸ਼ੀਅਮ ਦੀ ਪੂਰਤੀ ਲਈ ਅਤੇ ਕੁਝ ਉਤਪਾਦਾਂ ਵਿੱਚ ਐਸਿਡ ਤੋਂ ਰਾਹਤ ਲਈ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ।"},
+    effects:{en:"May cause constipation, gas or bloating. Excess calcium can be harmful.",
+      hi:"कब्ज, गैस या पेट फूलना हो सकता है। अत्यधिक कैल्शियम नुकसानदेह हो सकता है।",
+      pa:"ਕਬਜ਼, ਗੈਸ ਜਾਂ ਪੇਟ ਫੁੱਲ ਸਕਦਾ ਹੈ। ਬਹੁਤ ਜ਼ਿਆਦਾ ਕੈਲਸ਼ੀਅਮ ਨੁਕਸਾਨਦਾਇਕ ਹੋ ਸਕਦਾ ਹੈ।"},
+    caution:{en:"Kidney disease and interactions with other medicines matter. Confirm whether supplementation is needed.",
+      hi:"किडनी की बीमारी और अन्य दवाओं के साथ प्रतिक्रिया महत्वपूर्ण हैं। पहले जाँचें कि सप्लीमेंट की ज़रूरत है या नहीं।",
+      pa:"ਗੁਰਦਿਆਂ ਦੀ ਬਿਮਾਰੀ ਅਤੇ ਹੋਰ ਦਵਾਈਆਂ ਨਾਲ ਪ੍ਰਤੀਕਿਰਿਆ ਮਹੱਤਵਪੂਰਨ ਹਨ। ਪਹਿਲਾਂ ਪਤਾ ਕਰੋ ਕਿ ਸਪਲੀਮੈਂਟ ਦੀ ਲੋੜ ਹੈ ਜਾਂ ਨਹੀਂ।"}
+  },
+  {
+    id:"cetirizine",name:"Cetirizine",generic:"Cetirizine",
+    compound:"Cetirizine dihydrochloride",
+    category:"Allergy & skin",emoji:"🌿",
+    names:["cetirizine","allergy","skin","itching","sneezing"],
+    uses:{en:"An antihistamine used to relieve symptoms of some allergies, including sneezing and itching.",
+      hi:"यह एंटीहिस्टामिन कुछ एलर्जी के लक्षण, छींक और खुजली कम करने में उपयोग होती है।",
+      pa:"ਇਹ ਐਂਟੀਹਿਸਟਾਮਿਨ ਕੁਝ ਐਲਰਜੀ ਦੇ ਲੱਛਣ, ਛਿੱਕਾਂ ਅਤੇ ਖੁਜਲੀ ਘਟਾਉਣ ਲਈ ਵਰਤੀ ਜਾਂਦੀ ਹੈ।"},
+    effects:{en:"Drowsiness, fatigue and dry mouth may occur.",
+      hi:"नींद आना, थकान या मुँह सूखना हो सकता है।",
+      pa:"ਨੀਂਦ ਆਉਣਾ, ਥਕਾਵਟ ਜਾਂ ਮੂੰਹ ਸੁੱਕਣਾ ਹੋ ਸਕਦਾ ਹੈ।"},
+    caution:{en:"It can make some people sleepy. Check with a professional if you have kidney problems or take sedating medicines.",
+      hi:"इससे कुछ लोगों को नींद आ सकती है। किडनी की समस्या हो या नींद लाने वाली दवा लेते हों तो सलाह लें।",
+      pa:"ਇਸ ਨਾਲ ਕੁਝ ਲੋਕਾਂ ਨੂੰ ਨੀਂਦ ਆ ਸਕਦੀ ਹੈ। ਗੁਰਦਿਆਂ ਦੀ ਸਮੱਸਿਆ ਹੋਵੇ ਜਾਂ ਨੀਂਦ ਵਾਲੀ ਦਵਾਈ ਲੈਂਦੇ ਹੋ ਤਾਂ ਸਲਾਹ ਲਵੋ।"}
+  },
+  {
+    id:"salbutamol",name:"Salbutamol",generic:"Salbutamol (albuterol)",
+    compound:"Salbutamol sulfate (common inhaler form)",
+    category:"Lungs & breathing",emoji:"🫁",
+    names:["salbutamol","albuterol","lungs","asthma","breathing"],
+    uses:{en:"A bronchodilator used for relief of wheezing or breathing difficulty in certain airway conditions.",
+      hi:"कुछ श्वसन समस्याओं में घरघराहट या साँस लेने की परेशानी से राहत देने वाली ब्रोंकोडायलेटर दवा है।",
+      pa:"ਕੁਝ ਸਾਹ ਦੀਆਂ ਸਮੱਸਿਆਵਾਂ ਵਿੱਚ ਘਰਘਰਾਹਟ ਜਾਂ ਸਾਹ ਦੀ ਮੁਸ਼ਕਲ ਤੋਂ ਰਾਹਤ ਲਈ ਵਰਤੀ ਜਾਂਦੀ ਹੈ।"},
+    effects:{en:"Shaking, faster heartbeat or headache can occur.",
+      hi:"हाथ काँपना, दिल की धड़कन तेज होना या सिरदर्द हो सकता है।",
+      pa:"ਕੰਬਣ, ਦਿਲ ਦੀ ਧੜਕਣ ਤੇਜ਼ ਹੋਣਾ ਜਾਂ ਸਿਰਦਰਦ ਹੋ ਸਕਦਾ ਹੈ।"},
+    caution:{en:"Use the prescribed inhaler technique and plan. Severe or worsening breathing difficulty is an emergency.",
+      hi:"डॉक्टर द्वारा बताई गई इनहेलर तकनीक और योजना का पालन करें। साँस की गंभीर या बढ़ती परेशानी आपातकाल हो सकती है।",
+      pa:"ਡਾਕਟਰ ਵੱਲੋਂ ਦੱਸੀ ਇਨਹੇਲਰ ਤਕਨੀਕ ਅਤੇ ਯੋਜਨਾ ਦੀ ਪਾਲਣਾ ਕਰੋ। ਸਾਹ ਦੀ ਗੰਭੀਰ ਜਾਂ ਵਧਦੀ ਮੁਸ਼ਕਲ ਐਮਰਜੈਂਸੀ ਹੋ ਸਕਦੀ ਹੈ।"}
+  },
+  {
+    id:"gastromax",name:"Gastromax (brand name)",generic:"Not confirmed from brand name alone",
+    compound:"Check the product label for its active ingredient(s)",
+    category:"Stomach & acidity",emoji:"🧴",
+    names:["gastromax","gastro max"],
+    uses:{en:"The intended use cannot be confirmed safely from this brand name alone because products and formulations can differ.",
+      hi:"केवल इस ब्रांड नाम से इसका उपयोग सुरक्षित रूप से तय नहीं किया जा सकता, क्योंकि सामग्री और फॉर्मूलेशन अलग हो सकते हैं।",
+      pa:"ਸਿਰਫ਼ ਇਸ ਬ੍ਰਾਂਡ ਨਾਮ ਤੋਂ ਇਸਦੀ ਵਰਤੋਂ ਦੀ ਪੁਸ਼ਟੀ ਨਹੀਂ ਹੋ ਸਕਦੀ, ਕਿਉਂਕਿ ਸਮੱਗਰੀ ਅਤੇ ਫਾਰਮੂਲੇ ਵੱਖ ਹੋ ਸਕਦੇ ਹਨ।"},
+    effects:{en:"Possible side effects depend on the exact active ingredients. Check the label or ask a pharmacist.",
+      hi:"दुष्प्रभाव वास्तविक सक्रिय तत्वों पर निर्भर करते हैं। पैकेट जाँचें या फार्मासिस्ट से पूछें।",
+      pa:"ਮਾੜੇ ਪ੍ਰਭਾਵ ਅਸਲ ਕਿਰਿਆਸ਼ੀਲ ਤੱਤਾਂ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਪੈਕੇਟ ਵੇਖੋ ਜਾਂ ਫਾਰਮਾਸਿਸਟ ਨੂੰ ਪੁੱਛੋ।"},
+    caution:{en:"Do not assume all products with this name have the same ingredients. Verify the composition before use.",
+      hi:"यह न मानें कि इस नाम के सभी उत्पादों में समान तत्व हैं। उपयोग से पहले संरचना की पुष्टि करें।",
+      pa:"ਇਹ ਨਾ ਮੰਨੋ ਕਿ ਇਸ ਨਾਮ ਵਾਲੇ ਸਾਰੇ ਉਤਪਾਦਾਂ ਵਿੱਚ ਇੱਕੋ ਸਮੱਗਰੀ ਹੈ। ਵਰਤੋਂ ਤੋਂ ਪਹਿਲਾਂ ਤੱਤਾਂ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ।"}
+  }
+];
+
+const categories = [
+  "All","Heart & blood pressure","Heart & cholesterol","Kidney health","Lungs & breathing",
+  "Allergy & skin","Calcium & bones","Blood sugar","Pain & fever","Antibiotic","Stomach & acidity"
+];
+let selectedCategory = "All";
+
+function renderCategoryChips() {
+  const wrap = document.getElementById("categoryChips");
+  const categoryNames = {
+    "All":{en:"All",hi:"सभी",pa:"ਸਾਰੇ"},
+    "Heart & blood pressure":{en:"Heart / BP",hi:"हृदय / BP",pa:"ਦਿਲ / BP"},
+    "Heart & cholesterol":{en:"Cholesterol",hi:"कोलेस्ट्रॉल",pa:"ਕੋਲੇਸਟਰੋਲ"},
+    "Kidney health":{en:"Kidney",hi:"किडनी",pa:"ਗੁਰਦੇ"},
+    "Lungs & breathing":{en:"Lungs",hi:"फेफड़े",pa:"ਫੇਫੜੇ"},
+    "Allergy & skin":{en:"Allergy / Skin",hi:"एलर्जी / त्वचा",pa:"ਐਲਰਜੀ / ਚਮੜੀ"},
+    "Calcium & bones":{en:"Calcium / Bones",hi:"कैल्शियम / हड्डियाँ",pa:"ਕੈਲਸ਼ੀਅਮ / ਹੱਡੀਆਂ"},
+    "Blood sugar":{en:"Blood sugar",hi:"ब्लड शुगर",pa:"ਬਲੱਡ ਸ਼ੂਗਰ"},
+    "Pain & fever":{en:"Pain / Fever",hi:"दर्द / बुखार",pa:"ਦਰਦ / ਬੁਖਾਰ"},
+    "Antibiotic":{en:"Antibiotics",hi:"एंटीबायोटिक",pa:"ਐਂਟੀਬਾਇਓਟਿਕ"},
+    "Stomach & acidity":{en:"Stomach / Acidity",hi:"पेट / एसिडिटी",pa:"ਪੇਟ / ਐਸਿਡਿਟੀ"}
+  };
+  wrap.innerHTML = categories.map(c =>
+    `<button class="chip ${selectedCategory===c?'active':''}" onclick="setCategory(${JSON.stringify(c)})">${categoryNames[c]?.[currentLang] || c}</button>`
+  ).join("");
+}
+function setCategory(c) {
+  selectedCategory=c;
+  renderCategoryChips();
+  renderMedicines();
+}
+function renderMedicines() {
+  const wrap = document.getElementById("medicineResults");
+  if (!wrap) return;
+  const q = document.getElementById("medSearch").value.trim().toLowerCase();
+  const list = medicines.filter(m => {
+    const searchable = [m.name,m.generic,m.compound,m.category,...m.names].join(" ").toLowerCase();
+    const catMatch = selectedCategory==="All" ||
+      m.category===selectedCategory ||
+      (selectedCategory==="Kidney health" && /kidney|renal/i.test(searchable)) ||
+      (selectedCategory==="Antibiotic" && m.category==="Antibiotic");
+    return catMatch && (!q || searchable.includes(q));
+  });
+  if (!list.length) {
+    wrap.innerHTML = `<div class="empty-state card" style="grid-column:1/-1"><div class="big">🔎</div>${tr("noMatches")}</div>`;
+    return;
+  }
+  wrap.innerHTML = list.map(m => `
+    <article class="card medicine-card">
+      <div class="med-top">
+        <div class="icon-box">${m.emoji}</div>
+        <div><div class="med-name">${escapeHtml(m.name)}</div>
+        <div class="med-generic">${tr("generic")}: ${escapeHtml(m.generic)}</div></div>
+      </div>
+      <div><span class="tag">${escapeHtml(m.category)}</span></div>
+      <p style="font-size:13px;margin:0">${escapeHtml(m.uses[currentLang] || m.uses.en)}</p>
+      <div class="med-actions">
+        <button class="btn btn-light" onclick="showMedicineDetails('${m.id}')">ⓘ ${tr("details")}</button>
+        <button class="btn btn-outline" onclick="prefillReminder('${m.id}')">⏰ ${tr("remind")}</button>
+      </div>
+    </article>`).join("");
+}
+function showMedicineDetails(id) {
+  const m=medicines.find(x=>x.id===id);
+  if(!m)return;
+  const w=window.open("","_blank","width=650,height=760");
+  if(!w){alert("Please allow pop-ups to view medicine details.");return;}
+  const content = `
+    <!DOCTYPE html><html lang="${currentLang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width">
+    <title>${escapeHtml(m.name)} | Medicine AI</title>
+    <style>
+      body{font-family:Arial,sans-serif;background:#f3f7fc;color:#17243a;padding:22px;line-height:1.6}
+      .card{background:white;padding:22px;border-radius:18px;max-width:580px;margin:auto;border:1px solid #dfe8f2}
+      h1{font-size:25px}h3{font-size:14px;color:#176b87;margin-bottom:4px}
+      p{font-size:14px} .note{background:#fff5dc;border:1px solid #f2dfae;padding:12px;border-radius:10px;font-size:12px}
+      button{background:#176b87;color:white;border:0;padding:11px 15px;border-radius:10px;cursor:pointer}
+      hr{border:0;border-top:1px solid #e3ebf3;margin:17px 0}
+    </style></head><body><div class="card">
+      <div style="font-size:40px">${m.emoji}</div><h1>${escapeHtml(m.name)}</h1>
+      <p><b>${tr("generic")}:</b> ${escapeHtml(m.generic)}</p>
+      <p><b>${tr("compound")}:</b> ${escapeHtml(m.compound)}</p>
+      <hr><h3>${tr("uses")}</h3><p>${escapeHtml(m.uses[currentLang]||m.uses.en)}</p>
+      <h3>${tr("sideEffects")}</h3><p>${escapeHtml(m.effects[currentLang]||m.effects.en)}</p>
+      <h3>${tr("cautions")}</h3><p>${escapeHtml(m.caution[currentLang]||m.caution.en)}</p>
+      <div class="note">${tr("medicineCaution")}</div>
+      <p style="margin-top:16px"><button onclick="window.close()">Close</button></p>
+    </div></body></html>`;
+  w.document.write(content);
+  w.document.close();
+}
+function prefillReminder(id) {
+  const m=medicines.find(x=>x.id===id);
+  if(m) document.getElementById("remMedicine").value=m.name;
+  showView("reminders");
+  document.getElementById("remMedicine").focus();
+}
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+// ===========================================
+// MEDICINE REMINDERS
+// ===========================================
+let reminders=[];
+try {reminders=JSON.parse(localStorage.getItem("medicineAI_reminders")||"[]");}
+catch(e){reminders=[];}
+
+function saveReminders() {
+  try {localStorage.setItem("medicineAI_reminders",JSON.stringify(reminders));}
+  catch(e){console.warn("Browser storage is unavailable.",e);}
+  renderReminders();
+}
+document.getElementById("reminderForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const name=document.getElementById("remMedicine").value.trim();
+  const time=document.getElementById("remTime").value;
+  const note=document.getElementById("remNote").value.trim();
+  if(!name||!time) return;
+  reminders.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name,time,note});
+  saveReminders();
+  document.getElementById("remMedicine").value="";
+  document.getElementById("remNote").value="";
+  alert(tr("reminderSaved"));
+});
+function renderReminders() {
+  const list=document.getElementById("reminderList");
+  if(!list)return;
+  document.getElementById("reminderCount").textContent=reminders.length;
+  if(!reminders.length) {
+    list.innerHTML=`<div class="empty-state"><div class="big">⏰</div>${tr("noReminders")}</div>`;
+    return;
+  }
+  list.innerHTML=reminders.slice().sort((a,b)=>a.time.localeCompare(b.time)).map(r=>`
+    <div class="reminder-item">
+      <div class="reminder-details">
+        <div class="reminder-time">${escapeHtml(r.time)}</div>
+        <strong>${escapeHtml(r.name)}</strong>
+        ${r.note?`<p>${escapeHtml(r.note)}</p>`:""}
+      </div>
+      <div class="reminder-actions">
+        <button class="btn btn-light" onclick="speakReminder(${JSON.stringify(r.name)})">🔊 ${tr("test")}</button>
+        <button class="btn btn-danger" onclick="deleteReminder('${r.id}')">${tr("delete")}</button>
+      </div>
+    </div>`).join("");
+}
+function deleteReminder(id) {
+  reminders=reminders.filter(r=>r.id!==id);
+  saveReminders();
+  alert(tr("reminderDeleted"));
+}
+function getVoiceLanguage() {
+  const lang=document.getElementById("voiceStyle").value;
+  return {en:"en-US",hi:"hi-IN",pa:"pa-IN"}[lang]||"en-US";
+}
+function speakText(text,lang) {
+  if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+    alert("Speech audio is not supported in this browser. Try a recent version of Chrome.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang=lang||getVoiceLanguage();
+  utterance.volume=Number(document.getElementById("volume").value)/100;
+  utterance.rate=0.9;
+  window.speechSynthesis.speak(utterance);
+}
+function speakReminder(name) {
+  const lang=document.getElementById("voiceStyle").value;
+  let msg;
+  if(lang==="hi") msg="आपकी दवा लेने का समय हो गया है। दवा का नाम: "+name;
+  else if(lang==="pa") msg="ਤੁਹਾਡੀ ਦਵਾਈ ਲੈਣ ਦਾ ਸਮਾਂ ਹੋ ਗਿਆ ਹੈ। ਦਵਾਈ ਦਾ ਨਾਮ: "+name;
+  else msg=tr("reminderMessage")+name;
+  speakText(msg,getVoiceLanguage());
+}
+function testVoice() { speakText(tr("testMessage"),getVoiceLanguage()); }
+async function enableNotifications() {
+  if(!("Notification" in window)) {
+    alert("This browser does not support notifications.");
+    return;
+  }
+  try {
+    const result=await Notification.requestPermission();
+    alert(result==="granted"?tr("notificationReady"):tr("notificationDenied"));
+  } catch(e) {alert(tr("notificationDenied"));}
+}
+
+// Page-open reminder checking. One alert per reminder per day.
+const triggered=new Set();
+function checkReminders() {
+  const now=new Date();
+  const hhmm=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+  const dateKey=now.getFullYear()+"-"+now.getMonth()+"-"+now.getDate();
+  reminders.forEach(r=>{
+    const key=dateKey+"-"+r.id;
+    if(r.time===hhmm&&!triggered.has(key)) {
+      triggered.add(key);
+      speakReminder(r.name);
+      if("Notification" in window && Notification.permission==="granted") {
+        try {new Notification("Medicine AI",{body:tr("reminderMessage")+r.name});}catch(e){}
+      }
+    }
+  });
+}
+setInterval(checkReminders,10000);
+
+// ===========================================
+// PHARMACY MAP SEARCH
+// ===========================================
+document.getElementById("pharmacyForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const place=document.getElementById("pharmacyPlace").value.trim();
+  if(!place){alert(tr("enterPlace"));return;}
+  const url="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent("pharmacy near "+place);
+  const win=window.open(url,"_blank","noopener,noreferrer");
+  if(!win) alert(tr("openMapFailed"));
+});
+function useMyLocation() {
+  if(!navigator.geolocation) {
+    alert(tr("locationUnsupported"));return;
+  }
+  navigator.geolocation.getCurrentPosition(position=>{
+    const lat=position.coords.latitude;
+    const lon=position.coords.longitude;
+    const url=`https://www.google.com/maps/search/?api=1&query=${lat},${lon}+pharmacy`;
+    const win=window.open(url,"_blank","noopener,noreferrer");
+    if(!win) alert(tr("openMapFailed"));
+  },()=>{
+    alert(tr("locationDenied"));
+  },{enableHighAccuracy:false,timeout:10000,maximumAge:60000});
+}
+
+// ===========================================
+// INTERACTIVE HUMAN BODY LAB
+// ===========================================
+const bodyParts = {
+  brain:{
+    icon:"🧠",
+    name:{en:"Brain",hi:"मस्तिष्क",pa:"ਦਿਮਾਗ"},
+    description:{
+      en:"The brain is the main control centre of the nervous system. It receives information from the senses, helps us think and remember, controls voluntary movement, and supports emotions, language and many automatic body processes.",
+      hi:"मस्तिष्क तंत्रिका तंत्र का मुख्य नियंत्रण केंद्र है। यह इंद्रियों से जानकारी लेता है, सोचने और याद रखने में मदद करता है, स्वैच्छिक गतिविधियों को नियंत्रित करता है और भावनाओं, भाषा तथा शरीर की कई स्वचालित प्रक्रियाओं में भाग लेता है।",
+      pa:"ਦਿਮਾਗ ਨਰਵਸ ਸਿਸਟਮ ਦਾ ਮੁੱਖ ਕੰਟਰੋਲ ਕੇਂਦਰ ਹੈ। ਇਹ ਇੰਦਰੀਆਂ ਤੋਂ ਜਾਣਕਾਰੀ ਲੈਂਦਾ ਹੈ, ਸੋਚਣ ਅਤੇ ਯਾਦ ਰੱਖਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ, ਆਪਣੀ ਇੱਛਾ ਨਾਲ ਹੋਣ ਵਾਲੀਆਂ ਹਰਕਤਾਂ ਨੂੰ ਸੰਭਾਲਦਾ ਹੈ ਅਤੇ ਭਾਵਨਾਵਾਂ ਤੇ ਭਾਸ਼ਾ ਵਿੱਚ ਭੂਮਿਕਾ ਨਿਭਾਉਂਦਾ ਹੈ।"},
+    speech:{
+      en:"Hello! Think of me as the body's control centre. Billions of nerve cells communicate using electrical and chemical signals. Different brain regions work together so you can learn, move, feel and respond.",
+      hi:"नमस्ते! मुझे शरीर का नियंत्रण केंद्र समझिए। अरबों तंत्रिका कोशिकाएँ विद्युत और रासायनिक संकेतों से संवाद करती हैं। मस्तिष्क के अलग-अलग हिस्से मिलकर सीखने, चलने, महसूस करने और प्रतिक्रिया देने में मदद करते हैं।",
+      pa:"ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਨੂੰ ਸਰੀਰ ਦਾ ਕੰਟਰੋਲ ਕੇਂਦਰ ਸਮਝੋ। ਅਰਬਾਂ ਨਰਵ ਸੈੱਲ ਬਿਜਲੀ ਅਤੇ ਰਸਾਇਣਕ ਸੰਕੇਤਾਂ ਰਾਹੀਂ ਸੰਚਾਰ ਕਰਦੇ ਹਨ। ਦਿਮਾਗ ਦੇ ਵੱਖ-ਵੱਖ ਹਿੱਸੇ ਮਿਲ ਕੇ ਸਿੱਖਣ, ਹਿਲਣ ਅਤੇ ਮਹਿਸੂਸ ਕਰਨ ਵਿੱਚ ਮਦਦ ਕਰਦੇ ਹਨ।"}
+  },
+  heart:{
+    icon:"❤️",
+    name:{en:"Heart",hi:"हृदय",pa:"ਦਿਲ"},
+    description:{
+      en:"The heart is a muscular organ that pumps blood around the body. Blood delivers oxygen and nutrients to tissues and carries carbon dioxide and other waste products away. Valves help blood move in the correct direction.",
+      hi:"हृदय एक मांसपेशीय अंग है जो पूरे शरीर में रक्त पंप करता है। रक्त ऊतकों तक ऑक्सीजन और पोषक तत्व पहुँचाता है तथा कार्बन डाइऑक्साइड और अन्य अपशिष्ट पदार्थों को दूर ले जाता है।",
+      pa:"ਦਿਲ ਇੱਕ ਮਾਸਪੇਸ਼ੀ ਵਾਲਾ ਅੰਗ ਹੈ ਜੋ ਸਾਰੇ ਸਰੀਰ ਵਿੱਚ ਖੂਨ ਪੰਪ ਕਰਦਾ ਹੈ। ਖੂਨ ਆਕਸੀਜਨ ਅਤੇ ਪੋਸ਼ਕ ਤੱਤ ਪਹੁੰਚਾਉਂਦਾ ਹੈ ਅਤੇ ਕਾਰਬਨ ਡਾਈਆਕਸਾਈਡ ਤੇ ਹੋਰ ਫ਼ਜ਼ਲ ਪਦਾਰਥ ਦੂਰ ਲੈ ਜਾਂਦਾ ਹੈ।"},
+    speech:{
+      en:"I am your heart. Each beat pushes blood through blood vessels. Your heart rate can change with activity, emotions, illness and many other factors.",
+      hi:"मैं आपका हृदय हूँ। हर धड़कन रक्त वाहिकाओं में रक्त आगे बढ़ाती है। गतिविधि, भावनाएँ और कई अन्य कारणों से धड़कन बदल सकती है।",
+      pa:"ਮੈਂ ਤੁਹਾਡਾ ਦਿਲ ਹਾਂ। ਹਰ ਧੜਕਣ ਖੂਨ ਨੂੰ ਖੂਨ ਦੀਆਂ ਨਲੀਆਂ ਵਿੱਚ ਅੱਗੇ ਧੱਕਦੀ ਹੈ। ਕਸਰਤ, ਭਾਵਨਾਵਾਂ ਅਤੇ ਹੋਰ ਕਾਰਨਾਂ ਨਾਲ ਧੜਕਣ ਬਦਲ ਸਕਦੀ ਹੈ।"}
+  },
+  lungs:{
+    icon:"🫁",
+    name:{en:"Lungs",hi:"फेफड़े",pa:"ਫੇਫੜੇ"},
+    description:{
+      en:"The lungs are the main organs of breathing. In tiny air sacs called alveoli, oxygen moves into the blood and carbon dioxide moves from the blood into the air to be breathed out.",
+      hi:"फेफड़े साँस लेने के मुख्य अंग हैं। एल्वियोली नामक छोटी वायु थैलियों में ऑक्सीजन रक्त में जाती है और कार्बन डाइऑक्साइड रक्त से हवा में आकर बाहर निकलती है।",
+      pa:"ਫੇਫੜੇ ਸਾਹ ਲੈਣ ਦੇ ਮੁੱਖ ਅੰਗ ਹਨ। ਐਲਵੀਓਲਾਈ ਨਾਮਕ ਬਹੁਤ ਛੋਟੀਆਂ ਹਵਾ ਥੈਲੀਆਂ ਵਿੱਚ ਆਕਸੀਜਨ ਖੂਨ ਵਿੱਚ ਜਾਂਦੀ ਹੈ ਅਤੇ ਕਾਰਬਨ ਡਾਈਆਕਸਾਈਡ ਖੂਨ ਤੋਂ ਹਵਾ ਵਿੱਚ ਆ ਕੇ ਬਾਹਰ ਨਿਕਲਦੀ ਹੈ।"},
+    speech:{
+      en:"Breathe in! Air travels through the airways into the lungs. Tiny air sacs exchange oxygen and carbon dioxide with the blood. The diaphragm helps the chest expand and relax.",
+      hi:"साँस अंदर लें! हवा श्वसन मार्ग से फेफड़ों में जाती है। छोटी वायु थैलियाँ रक्त के साथ ऑक्सीजन और कार्बन डाइऑक्साइड का आदान-प्रदान करती हैं।",
+      pa:"ਸਾਹ ਅੰਦਰ ਲਵੋ! ਹਵਾ ਸਾਹ ਵਾਲੇ ਰਸਤਿਆਂ ਰਾਹੀਂ ਫੇਫੜਿਆਂ ਤੱਕ ਪਹੁੰਚਦੀ ਹੈ। ਛੋਟੀਆਂ ਹਵਾ ਥੈਲੀਆਂ ਖੂਨ ਨਾਲ ਆਕਸੀਜਨ ਅਤੇ ਕਾਰਬਨ ਡਾਈਆਕਸਾਈਡ ਦਾ ਅਦਾਨ-ਪ੍ਰਦਾਨ ਕਰਦੀਆਂ ਹਨ।"}
+  },
+  kidneys:{
+    icon:"🫘",
+    name:{en:"Kidneys",hi:"गुर्दे",pa:"ਗੁਰਦੇ"},
+    description:{
+      en:"The kidneys filter the blood to remove waste and extra water, which become urine. They also help regulate salts, fluid balance, blood pressure and signals involved in red blood cell production.",
+      hi:"गुर्दे रक्त को छानकर अपशिष्ट और अतिरिक्त पानी निकालते हैं, जिससे मूत्र बनता है। वे लवण, तरल संतुलन, रक्तचाप और लाल रक्त कोशिकाओं के निर्माण से जुड़े संकेतों को भी नियंत्रित करने में मदद करते हैं।",
+      pa:"ਗੁਰਦੇ ਖੂਨ ਵਿੱਚੋਂ ਫ਼ਜ਼ਲ ਪਦਾਰਥ ਅਤੇ ਵਾਧੂ ਪਾਣੀ ਛਾਣਦੇ ਹਨ, ਜਿਸ ਨਾਲ ਪਿਸ਼ਾਬ ਬਣਦਾ ਹੈ। ਇਹ ਲੂਣ, ਤਰਲ ਸੰਤੁਲਨ, ਬਲੱਡ ਪ੍ਰੈਸ਼ਰ ਅਤੇ ਲਾਲ ਖੂਨ ਦੇ ਸੈੱਲ ਬਣਾਉਣ ਨਾਲ ਜੁੜੇ ਕੰਮਾਂ ਵਿੱਚ ਵੀ ਮਦਦ ਕਰਦੇ ਹਨ।"},
+    speech:{
+      en:"I am your kidney. I filter the blood and help balance water and minerals. Kidney health can affect many medicines, so prescribed drugs sometimes need professional review.",
+      hi:"मैं आपका गुर्दा हूँ। मैं रक्त को छानता हूँ और पानी व खनिजों का संतुलन बनाए रखने में मदद करता हूँ। गुर्दों की स्थिति कई दवाओं के उपयोग को प्रभावित कर सकती है।",
+      pa:"ਮੈਂ ਤੁਹਾਡਾ ਗੁਰਦਾ ਹਾਂ। ਮੈਂ ਖੂਨ ਛਾਣਦਾ ਹਾਂ ਅਤੇ ਪਾਣੀ ਤੇ ਖਣਿਜਾਂ ਦਾ ਸੰਤੁਲਨ ਬਣਾਈ ਰੱਖਦਾ ਹਾਂ। ਗੁਰਦਿਆਂ ਦੀ ਹਾਲਤ ਕਈ ਦਵਾਈਆਂ ਦੀ ਵਰਤੋਂ ਨੂੰ ਪ੍ਰਭਾਵਿਤ ਕਰ ਸਕਦੀ ਹੈ।"}
+  },
+  liver:{
+    icon:"🟤",
+    name:{en:"Liver",hi:"यकृत / लिवर",pa:"ਜਿਗਰ"},
+    description:{
+      en:"The liver processes nutrients, makes bile to help digest fats, stores certain vitamins and energy, and changes many medicines and substances so the body can use or remove them.",
+      hi:"लिवर पोषक तत्वों को संसाधित करता है, वसा पचाने में मदद के लिए पित्त बनाता है, कुछ विटामिन व ऊर्जा जमा करता है और कई दवाओं को शरीर में संसाधित करता है।",
+      pa:"ਜਿਗਰ ਪੋਸ਼ਕ ਤੱਤਾਂ ਨੂੰ ਪ੍ਰਕਿਰਿਆ ਕਰਦਾ ਹੈ, ਚਰਬੀ ਹਜ਼ਮ ਕਰਨ ਲਈ ਪਿੱਤ ਬਣਾਉਂਦਾ ਹੈ, ਕੁਝ ਵਿਟਾਮਿਨ ਅਤੇ ਊਰਜਾ ਸੰਭਾਲਦਾ ਹੈ ਅਤੇ ਕਈ ਦਵਾਈਆਂ ਨੂੰ ਸਰੀਰ ਵਿੱਚ ਪ੍ਰਕਿਰਿਆ ਕਰਦਾ ਹੈ।"},
+    speech:{
+      en:"I am the liver. I process nutrients and help handle many chemicals and medicines. Some substances can injure the liver, so correct medicine use matters.",
+      hi:"मैं लिवर हूँ। मैं पोषक तत्वों को संसाधित करता हूँ और कई रसायनों व दवाओं को संभालने में मदद करता हूँ। कुछ पदार्थ लिवर को नुकसान पहुँचा सकते हैं।",
+      pa:"ਮੈਂ ਜਿਗਰ ਹਾਂ। ਮੈਂ ਪੋਸ਼ਕ ਤੱਤਾਂ ਅਤੇ ਕਈ ਰਸਾਇਣਾਂ ਤੇ ਦਵਾਈਆਂ ਨੂੰ ਸੰਭਾਲਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹਾਂ। ਕੁਝ ਪਦਾਰਥ ਜਿਗਰ ਨੂੰ ਨੁਕਸਾਨ ਪਹੁੰਚਾ ਸਕਦੇ ਹਨ।"}
+  },
+  stomach:{
+    icon:"🫃",
+    name:{en:"Stomach",hi:"पेट",pa:"ਪੇਟ"},
+    description:{
+      en:"The stomach stores food temporarily and mixes it with acid and digestive enzymes. This helps break food down before it passes to the small intestine.",
+      hi:"पेट भोजन को कुछ समय रखता है और उसे एसिड तथा पाचक एंजाइमों के साथ मिलाता है। इससे भोजन छोटी आंत में जाने से पहले टूटने लगता है।",
+      pa:"ਪੇਟ ਭੋਜਨ ਨੂੰ ਕੁਝ ਸਮੇਂ ਲਈ ਰੱਖਦਾ ਹੈ ਅਤੇ ਇਸ ਨੂੰ ਐਸਿਡ ਤੇ ਪਾਚਕ ਐਨਜ਼ਾਈਮਾਂ ਨਾਲ ਮਿਲਾਉਂਦਾ ਹੈ। ਇਸ ਨਾਲ ਭੋਜਨ ਛੋਟੀ ਆਂਤ ਵਿੱਚ ਜਾਣ ਤੋਂ ਪਹਿਲਾਂ ਟੁੱਟਣਾ ਸ਼ੁਰੂ ਹੁੰਦਾ ਹੈ।"},
+    speech:{
+      en:"Welcome to the stomach! Muscular contractions mix food with digestive juices. The stomach lining helps protect the organ from its own acid.",
+      hi:"पेट में आपका स्वागत है! मांसपेशियों की हलचल भोजन को पाचक रसों के साथ मिलाती है। पेट की अंदरूनी परत उसे एसिड से बचाने में मदद करती है।",
+      pa:"ਪੇਟ ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ! ਮਾਸਪੇਸ਼ੀਆਂ ਦੀ ਹਰਕਤ ਭੋਜਨ ਨੂੰ ਪਾਚਕ ਰਸਾਂ ਨਾਲ ਮਿਲਾਉਂਦੀ ਹੈ। ਪੇਟ ਦੀ ਅੰਦਰਲੀ ਪਰਤ ਇਸਨੂੰ ਐਸਿਡ ਤੋਂ ਬਚਾਉਂਦੀ ਹੈ।"}
+  },
+  intestines:{
+    icon:"〰️",
+    name:{en:"Intestines",hi:"आँतें",pa:"ਆਂਦਰਾਂ"},
+    description:{
+      en:"The small intestine absorbs most nutrients from digested food. The large intestine absorbs remaining water and helps form stool. Gut microbes also contribute to normal digestive functions.",
+      hi:"छोटी आंत पचे भोजन से अधिकांश पोषक तत्व अवशोषित करती है। बड़ी आंत शेष पानी सोखती है और मल बनाने में मदद करती है।",
+      pa:"ਛੋਟੀ ਆਂਤ ਹਜ਼ਮ ਹੋਏ ਭੋਜਨ ਵਿੱਚੋਂ ਜ਼ਿਆਦਾਤਰ ਪੋਸ਼ਕ ਤੱਤ ਸੋਖਦੀ ਹੈ। ਵੱਡੀ ਆਂਤ ਬਾਕੀ ਪਾਣੀ ਸੋਖਦੀ ਹੈ ਅਤੇ ਮਲ ਬਣਾਉਣ ਵਿੱਚ ਮਦਦ ਕਰਦੀ ਹੈ।"},
+    speech:{
+      en:"I represent your intestines. This long, folded system absorbs nutrients and water. Its muscles gently move digestive contents along the tract.",
+      hi:"मैं आपकी आँतों का प्रतिनिधित्व करती हूँ। यह लंबी, मुड़ी हुई प्रणाली पोषक तत्वों और पानी को सोखती है और भोजन को आगे बढ़ाती है।",
+      pa:"ਮੈਂ ਤੁਹਾਡੀਆਂ ਆਂਦਰਾਂ ਨੂੰ ਦਰਸਾਉਂਦਾ ਹਾਂ। ਇਹ ਲੰਬਾ, ਮੁੜਿਆ ਹੋਇਆ ਤੰਤਰ ਪੋਸ਼ਕ ਤੱਤ ਅਤੇ ਪਾਣੀ ਸੋਖਦਾ ਹੈ ਅਤੇ ਭੋਜਨ ਨੂੰ ਅੱਗੇ ਵਧਾਉਂਦਾ ਹੈ।"}
+  },
+  bones:{
+    icon:"🦴",
+    name:{en:"Bones",hi:"हड्डियाँ",pa:"ਹੱਡੀਆਂ"},
+    description:{
+      en:"Bones provide structure, protect important organs and work with muscles to make movement possible. Bone marrow forms blood cells, and bones store minerals such as calcium and phosphorus.",
+      hi:"हड्डियाँ शरीर को संरचना देती हैं, महत्वपूर्ण अंगों की रक्षा करती हैं और मांसपेशियों के साथ गति में मदद करती हैं। अस्थि मज्जा रक्त कोशिकाएँ बनाती है और हड्डियाँ कैल्शियम जैसे खनिज जमा करती हैं।",
+      pa:"ਹੱਡੀਆਂ ਸਰੀਰ ਨੂੰ ਆਕਾਰ ਦਿੰਦੀਆਂ ਹਨ, ਅਹਿਮ ਅੰਗਾਂ ਦੀ ਰੱਖਿਆ ਕਰਦੀਆਂ ਹਨ ਅਤੇ ਮਾਸਪੇਸ਼ੀਆਂ ਨਾਲ ਮਿਲ ਕੇ ਹਿਲਣ ਵਿੱਚ ਮਦਦ ਕਰਦੀਆਂ ਹਨ। ਹੱਡੀਆਂ ਦੇ ਮੱਜੇ ਵਿੱਚ ਖੂਨ ਦੇ ਸੈੱਲ ਬਣਦੇ ਹਨ ਅਤੇ ਹੱਡੀਆਂ ਕੈਲਸ਼ੀਅਮ ਵਰਗੇ ਖਣਿਜ ਸੰਭਾਲਦੀਆਂ ਹਨ।"},
+    speech:{
+      en:"Your skeleton supports the body and protects organs. Bone is living tissue that is continually renewed; nutrition, movement and hormones all affect bone health.",
+      hi:"आपका कंकाल शरीर को सहारा देता है और अंगों की रक्षा करता है। हड्डियाँ जीवित ऊतक हैं, जिनका लगातार नवीनीकरण होता है।",
+      pa:"ਤੁਹਾਡਾ ਪਿੰਜਰ ਸਰੀਰ ਨੂੰ ਸਹਾਰਾ ਦਿੰਦਾ ਹੈ ਅਤੇ ਅੰਗਾਂ ਦੀ ਰੱਖਿਆ ਕਰਦਾ ਹੈ। ਹੱਡੀਆਂ ਜੀਵਤ ਟਿਸ਼ੂ ਹਨ ਜਿਨ੍ਹਾਂ ਦਾ ਨਵੀਨੀਕਰਨ ਹੁੰਦਾ ਰਹਿੰਦਾ ਹੈ।"}
+  },
+  skin:{
+    icon:"🖐️",
+    name:{en:"Skin",hi:"त्वचा",pa:"ਚਮੜੀ"},
+    description:{
+      en:"The skin is the body's largest organ. It forms a protective barrier, reduces water loss, helps regulate temperature, and contains nerve endings that detect touch, pressure, pain and temperature.",
+      hi:"त्वचा शरीर का सबसे बड़ा अंग है। यह सुरक्षा परत बनाती है, पानी की कमी कम करती है, तापमान नियंत्रित करने में मदद करती है और स्पर्श, दबाव, दर्द व तापमान महसूस करती है।",
+      pa:"ਚਮੜੀ ਸਰੀਰ ਦਾ ਸਭ ਤੋਂ ਵੱਡਾ ਅੰਗ ਹੈ। ਇਹ ਸੁਰੱਖਿਆ ਪਰਤ ਬਣਾਉਂਦੀ ਹੈ, ਪਾਣੀ ਦੀ ਕਮੀ ਘਟਾਉਂਦੀ ਹੈ, ਤਾਪਮਾਨ ਸੰਭਾਲਦੀ ਹੈ ਅਤੇ ਛੋਹ, ਦਬਾਅ, ਦਰਦ ਤੇ ਤਾਪਮਾਨ ਮਹਿਸੂਸ ਕਰਦੀ ਹੈ।"},
+    speech:{
+      en:"I am your skin. I help block germs, protect deeper tissues and sense the world around you. Gentle care and sun protection help maintain skin health.",
+      hi:"मैं आपकी त्वचा हूँ। मैं कीटाणुओं को रोकने, अंदर के ऊतकों की रक्षा करने और आसपास की चीज़ों को महसूस करने में मदद करती हूँ।",
+      pa:"ਮੈਂ ਤੁਹਾਡੀ ਚਮੜੀ ਹਾਂ। ਮੈਂ ਕੀਟਾਣੂਆਂ ਤੋਂ ਬਚਾਅ, ਅੰਦਰਲੇ ਟਿਸ਼ੂਆਂ ਦੀ ਰੱਖਿਆ ਅਤੇ ਆਲੇ-ਦੁਆਲੇ ਦੀਆਂ ਚੀਜ਼ਾਂ ਮਹਿਸੂਸ ਕਰਨ ਵਿੱਚ ਮਦਦ ਕਰਦੀ ਹਾਂ।"}
+  }
+};
+let activeOrgan = "brain";
+
+function renderBodyParts() {
+  const wrap=document.getElementById("bodyPartList");
+  if(!wrap)return;
+  wrap.innerHTML=Object.entries(bodyParts).map(([id,p])=>`
+    <button class="part-btn" onclick="openOrgan('${id}')">
+      <span>${p.icon}</span><span>${p.name[currentLang]||p.name.en}</span>
+    </button>`).join("");
+}
+function openOrgan(id, shouldShow=true) {
+  const p=bodyParts[id];
+  if(!p)return;
+  activeOrgan=id;
+  document.getElementById("organEmoji").textContent=p.icon;
+  document.getElementById("organLabel").textContent=(p.name[currentLang]||p.name.en)+" • LEARNING MODE";
+  document.getElementById("organTitle").textContent=p.name[currentLang]||p.name.en;
+  document.getElementById("organDescription").textContent=p.description[currentLang]||p.description.en;
+  document.getElementById("doctorSpeech").textContent=p.speech[currentLang]||p.speech.en;
+  if(shouldShow) {
+    document.getElementById("bodyModal").classList.add("show");
+    document.body.style.overflow="hidden";
+  }
+}
+function closeBodyModal() {
+  document.getElementById("bodyModal").classList.remove("show");
+  document.body.style.overflow="";
+  if("speechSynthesis" in window) window.speechSynthesis.cancel();
+}
+function speakOrgan() {
+  const p=bodyParts[activeOrgan];
+  if(p)speakText(p.speech[currentLang]||p.speech.en,
+    {en:"en-US",hi:"hi-IN",pa:"pa-IN"}[currentLang]);
+}
+
+document.querySelectorAll(".hotspot").forEach(el=>{
+  el.addEventListener("click",()=>openOrgan(el.dataset.part));
+  el.addEventListener("keydown",e=>{
+    if(e.key==="Enter"||e.key===" ") {
+      e.preventDefault();openOrgan(el.dataset.part);
+    }
+  });
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape")closeBodyModal();
+});
+
+// Initialise UI
+renderCategoryChips();
+renderMedicines();
+renderReminders();
+renderBodyParts();
+</script>
+</body>
+</html>
